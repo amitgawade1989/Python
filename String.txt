@@ -1,0 +1,406 @@
+# String 
+
+String is collection of characters having index for each character.
+Index starts from 0
+String is sequence. 
+
+s="ITVEDANT"
+
+I    T    V    E    D   A    N     T
+0    1    2    3    4   5    6     7
+
+
+
+As String supports indexing positions  of elements matters.
+how to access string characters.
+1. indexing
+2. sclicing
+
+1. Indexing
+s="ITVEDANT"
+I    T    V    E    D   A    N     T
+0    1    2    3    4   5    6     7
+
+s[0]   I
+s[1]   T 
+s[7]   T 
+s[8]   index error.
+
+>>> s="ITVEDANT"
+>>> s
+'ITVEDANT'
+>>> s[0]
+'I'
+>>> s[1]
+'T'
+>>> s[2]
+'V'
+>>> s[7]
+'T'
+>>> s[8]
+
+#It supports negative indexing. 
+Negative indexing starts from -1 
+I    T    V    E    D   A    N     T
+-8  -7    -6   -5   -4  -3   -2    -1
+s[-1]    T 
+
+
+
+2. By slicing.
+syntax:
+s[start:end:step]
+here start is starting of string
+end is end of string
+and step is how to select element for dispaly.(By default step is 1. it means it will consider all elements from string to print
+if step is 2 then it will skip one element n will consider next one 
+if step is 3 then it will skip 2 element
+if index is not present then it will not give any error.
+
+Note: Sign of step is important for slicing.
+Rules: Rules are based on sign of steps.
+
+If step sign is positive
+start=start 
+end=end-1
+go in forward direction means from left to write
+
+if step value is negative 
+start=start
+end=end+1
+go in backward direction (from right to left)
+s[start:end:step]
+
+-8  -7    -6   -5   -4  -3   -2     -1
+I    T    V    E    D    A     N      T
+0    1    2    3    4    5     6      7
+
+s[0:5]
+step = 1 
+start=0
+end=4
+go forward
+ 
+ s[2:6]
+step =1 
+start=2
+end=5
+forward 
+
+s[1:7:2]
+step=2
+start=1 
+end= 6
+forward dir
+
+s[::]
+
+s[:5:3]
+
+
+s[:7:-1]
+step = -1
+start= 0
+end=8
+go in backward dir. 
+
+s[6:1:-1]
+step=-1
+start=6
+end= 2
+go backward
+
+
+#Functions
+len() to find lenght
+in /not in  checks membership
+comparision = based on alphabet order. 
+
+#Functions related to removing spaces from string 
+ 1. rstrip()  remove space from right side
+ 2. lstrip()  remove space from left side 
+ 3. strip()   remove space from both side 
+ 
+>>> s.isalnum()
+True
+>>> s1="123abc"
+>>> s1.isalnum()
+True
+>>> s.islower()
+False
+>>> s.isascii()
+True
+>>> s.isdecimal()
+False
+>>> s2="2.2"
+>>> s2.isdecimal()
+False
+>>> s2.isdigit()
+False
+>>> s2
+'2.2'
+>>> s="22"
+>>> s.isdecimal()
+True
+>>> s.isdigit()
+True
+>>> s.istitle()
+False
+>>> s3="Amit"
+>>> s3.istitle()
+True
+>>> s
+'22'
+>>> s="ITVEDANT"
+>>> s.istitle()
+False
+>>> a=s.title()
+>>> a
+'Itvedant'
+>>> s
+'ITVEDANT'
+>>> s=s.upper()
+>>> s
+'ITVEDANT'
+>>> id(s)
+2168125046384
+>>> s=s.lower(s)
+Traceback (most recent call last):
+  File "<pyshell#59>", line 1, in <module>
+    s=s.lower(s)
+TypeError: lower() takes no arguments (1 given)
+>>> s=s.lower()
+>>> s
+'itvedant'
+>>> id(s)
+2168125046704
+>>> s=" Python"
+\
+>>> s
+' Python'
+>>> s.strip()
+'Python'
+>>> s="python is easy"
+>>> s.strip()
+'python is easy'
+>>> s=" Python is easy "
+>>> s.strip()
+'Python is easy'
+>>> s.lstrip()
+'Python is easy '
+>>> s.rstrip()
+' Python is easy'
+>>> len(s)
+16
+>>> 
+#how to find substring  
+>>> s.isalnum()
+True
+>>> s1="123abc"
+>>> s1.isalnum()
+True
+>>> s.islower()
+False
+>>> s.isascii()
+True
+>>> s.isdecimal()
+False
+>>> s2="2.2"
+>>> s2.isdecimal()
+False
+>>> s2.isdigit()
+False
+>>> s2
+'2.2'
+>>> s="22"
+>>> s.isdecimal()
+True
+>>> s.isdigit()
+True
+>>> s.istitle()
+False
+>>> s3="Amit"
+>>> s3.istitle()
+True
+>>> s
+'22'
+>>> s="ITVEDANT"
+>>> s.istitle()
+False
+>>> a=s.title()
+>>> a
+'Itvedant'
+>>> s
+'ITVEDANT'
+>>> s=s.upper()
+>>> s
+'ITVEDANT'
+>>> id(s)
+2168125046384
+>>> s=s.lower(s)
+Traceback (most recent call last):
+  File "<pyshell#59>", line 1, in <module>
+    s=s.lower(s)
+TypeError: lower() takes no arguments (1 given)
+>>> s=s.lower()
+>>> s
+'itvedant'
+>>> id(s)
+2168125046704
+>>> s=" Python"
+\
+>>> s
+' Python'
+>>> s.strip()
+'Python'
+>>> s="python is easy"
+>>> s.strip()
+'python is easy'
+>>> s=" Python is easy "
+>>> s.strip()
+'Python is easy'
+>>> s.lstrip()
+'Python is easy '
+>>> s.rstrip()
+' Python is easy'
+>>> len(s)
+16
+>>> s.find("thon")
+3
+>>> s
+' Python is easy '
+>>> s="Python is easy"
+>>> s.find("is")
+7
+>>> s.find("IT")
+-1
+>>> s.find("it")
+-1
+>>> s.index("Pyhton")
+Traceback (most recent call last):
+  File "<pyshell#79>", line 1, in <module>
+    s.index("Pyhton")
+ValueError: substring not found
+>>> s
+'Python is easy'
+>>> s.index("Python")
+0
+>>> s.rfind("is")
+7
+>>> s="wwwaaabccdd"
+>>> s.cound()
+Traceback (most recent call last):
+  File "<pyshell#84>", line 1, in <module>
+    s.cound()
+AttributeError: 'str' object has no attribute 'cound'
+>>> s.count()
+Traceback (most recent call last):
+  File "<pyshell#85>", line 1, in <module>
+    s.count()
+TypeError: count() takes at least 1 argument (0 given)
+>>> s.count("w")
+3
+>>> s="wwaawwbbcccww"
+>>> s.count("ww")
+3
+>>> s.count("w")
+6
+>>> s.replace("ww","zz")
+'zzaazzbbccczz'
+>>> s
+'wwaawwbbcccww'
+>>> id(s)
+2168125345264
+>>> s=s.replace("ww","zz")
+>>> id(s)
+2168125046384
+>>> s[0]="a"
+Traceback (most recent call last):
+  File "<pyshell#95>", line 1, in <module>
+    s[0]="a"
+TypeError: 'str' object does not support item assignment
+>>> s="Python is easy"
+>>> s.rfind("Python")
+0
+>>> s.rindex("Python")
+0
+>>> s.split("")
+Traceback (most recent call last):
+  File "<pyshell#99>", line 1, in <module>
+    s.split("")
+ValueError: empty separator
+>>> s.split(" ")
+['Python', 'is', 'easy']
+>>> s="Python-is-easy"
+>>> s.split("-")
+['Python', 'is', 'easy']
+>>> s.split("@")
+['Python-is-easy']
+>>> s="Python#is easy"
+>>> s.split("#")
+['Python', 'is easy']
+>>> s="Python,is,easy"
+>>> a=s.split(",")
+>>> a
+['Python', 'is', 'easy']
+>>> a="".join(a)
+>>> a
+'Pythoniseasy'
+>>> a
+'Pythoniseasy'
+>>> s="Python,is,easy"
+>>> a=s.split(",")
+>>> b="-".join(a)
+>>> b
+'Python-is-easy'
+>>> b=" ".join(a)
+>>> b
+'Python is easy'
+>>> s="a"
+>>> dir(s)
+['__add__', '__class__', '__contains__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__getnewargs__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mod__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__rmod__', '__rmul__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'capitalize', 'casefold', 'center', 'count', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'format_map', 'index', 'isalnum', 'isalpha', 'isascii', 'isdecimal', 'isdigit', 'isidentifier', 'islower', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'maketrans', 'partition', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
+>>> sort(s)
+Traceback (most recent call last):
+  File "<pyshell#120>", line 1, in <module>
+    sort(s)
+NameError: name 'sort' is not defined
+>>> sorted(s)
+['a']
+>>> s="ITVEDANT"
+>>> sorted(s)
+['A', 'D', 'E', 'I', 'N', 'T', 'T', 'V']
+>>>
+1. find()
+2. index()
+
+1. find()
+s.find(substring)
+it returns index of first occurance of given substring 
+if substring is not avilable it will give -1  
+find () also takes start and end of the substring 
+
+
+# index()
+It will give ValueError if substring is not in string. 
+
+ Here find () and index() works in forward direction 
+ and rfind() and rindex() works in backward direction. 
+ 
+
+#Count number of substrings in given string
+a="abcabcabcabcdddab"
+a.count('abc')  -> 4
+a.count('ab')  -> 5
+
+#Replacing a string with other string
+s.replace(oldstring, newstring)
+
+
+#Split
+used to split the string 
+l=s.split(seperator)
+default seperator is space 
+return type of split is list .
+
+
+
