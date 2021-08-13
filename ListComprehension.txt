@@ -1,0 +1,44 @@
+List 
+new_list = [expression for member in iterable]
+
+expression is the member itself, a call to a method, or any other valid expression that returns a value.
+In the example above, the expression i * i is the square of the member value.
+member is the object or value in the list or iterable. In the example above, the member value is i.
+iterable is a list, set, sequence, generator, or any other object that can return its elements one at a time. In the example above, the iterable is range(10).
+
+eg.
+squares = [i * i for i in range(10)]
+
+
+new_list = [expression for member in iterable (if conditional)]
+
+number_list = [x for x in range(20) if x % 2 == 0]
+print(number_list)
+
+Nested IF with List Comprehension
+num_list = [y for y in range(100) if y % 2 == 0 if y % 5 == 0]
+print(num_list)
+
+
+sentence = 'This is Python training"
+vowels = [i for i in sentence if i in 'aeiou']
+Here, list comprehension checks:
+
+Is y divisible by 2 or not?
+Is y divisible by 5 or not?
+If y satisfies both conditions, y is appended to num_list.
+
+if...else With List Comprehension
+obj = ["Even" if i%2==0 else "Odd" for i in range(10)]
+print(obj)
+
+
+original_prices = [1.25, -9.45, 10.22, 3.78, -5.92, 1.16]
+prices = [i if i > 0 else 0 for i in original_prices]
+
+def add(x):
+    return x**3
+
+l=[1,2,3,4]
+a=[add(i) for i in l]
+print(a)
