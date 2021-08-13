@@ -1,0 +1,232 @@
+#File handling in python.
+
+Defination:
+It is stirage location
+It is collection of bytes where we can store the data.
+Types of file:
+1. binary file
+2. Text file.
+
+#Different opeartion on file:
+
+1. open file/create file:
+f=open("filename.ext","mode")
+here f is file pointer. that points current file. 
+eg.
+f=open("abc.txt","w")
+#different modes to open the file.
+1. "r": This is used to open existing file for read operation.The file pointer is positioned 
+at the begining of the file.
+If file doesnot exist it will give error FileNotFoundError.
+
+
+2. "w"
+- It is used to open an existing file for write operation and it will override the content of existing file.
+-Suppose file does not exist then it will create the file and open it for write operation.
+3. "a"
+ - open an existing file in append mode. It will not overide the existing data. 
+ If file doesnot exist then it will create the file and we can append it. 
+ 
+4. "r+" 
+
+-Used to read and write data into file. Previous data will not be deleted.
+-The file pointer will be placed at begining of the file.
+5. "w+"
+To write and read data and overide the existing data. 
+
+6. "a+"
+- Used to append and read the data from file. It will not override the existing data. 
+
+
+7. 
+"x"
+Used to open the file in exclusive creation mode for write operation. 
+If file is already exist it will raise error FileExistError. 
+
+These all modes are for text files
+-For Binary files we will have
+rb , wb, ab, r+b, w+b, a+b,xb.
+
+
+
+#To create the file.
+f=open("abc.txt","w")
+#close the file
+f.close()
+
+#Properties of file object
+
+print("file name is",f.name)  #will give file name
+print("File mode:",f.mode)  #it will give mode
+print("Is file is readble",f.readable()) #return true if we can read it otherwise false
+print("Is file is Writable",f.writable())
+print("Is file is closed",f.closed)
+f.close()
+print("Is file is closed",f.closed)
+
+output:
+file name is abc.txt
+File mode: w
+Is file is readble False
+Is file is Writable True
+Is file is closed False
+Is file is closed True
+>>> 
+
+#writing data to text file.
+#1. write(str)
+#2. writelines(lines)
+
+f=open("abc.txt","w")
+
+f.write("ITVEDANT TRANGING\n")
+f.write("It is Python Traing\n")
+f.write("Machine Le\n")
+f.close()
+
+f=open("abc.txt","a")
+f.write("This will be added at last")
+
+list=["This is Python class\n","This is for web dev\n", "This is for DS\n"]
+f.writelines(list)
+f.close()
+
+
+
+
+#Reading files
+#read() used to read all data from file
+#read(n)  Read n characters from the file
+#readline() Read only one line
+#readlines()  Read all lines in list.
+f=open("abc.txt","r")
+#data=f.read()
+#data=f.read(4)
+#data=f.readline()
+#data=f.readlines()
+#print(data)
+#for i in data:
+#   print(i)
+print(f.read(3))
+print(f.readline())
+print(f.read(4))
+f.close()
+
+#The with statement
+
+#with is used while opening the file.
+#The advantage of with statement is that it will take care of closing of file
+#automatically.
+
+with open("ITVEDANT.txt","w") as f:
+    f.write("This is File handling operstions\n")
+    f.write("This is Python course")
+    print("Is file cloased?",f.closed)
+
+print("Is file cloased?",f.closed)  
+
+
+
+#seek(), tell()   
+f=open("ITVEDANT.txt","r")
+
+#tell()
+#It returns current position of the cursor/file pointer
+#Position starts from 0
+print(f.tell())  #0 
+print(f.read(5)) #This
+print(f.tell())  #5
+print(f.read(3))
+print(f.tell())
+
+
+
+#seek()
+
+#We can use this seek() to move the cursor/file pointer from one position to other specified position.
+
+print(f.tell())  #0
+f.seek(7)   # 
+print(f.tell())
+print(f.read(5))
+print(f.seek(0))
+print(f.tell())
+
+
+import os,sys
+fname=input("Enter file name to be checked")
+if os.path.isfile(fname):
+    print("File Exist",fname)
+    f=open(fname,'r')
+else:
+    print("File does not exist")
+    f=open(fname,"w")
+    f.write("This is new content")
+    f.close()
+
+if f.closed:
+    f=open(fname,'r')
+    print("The content of file {}".format(fname))
+    print(f.read())
+    f.close()
+else:
+    print("The content of file {}".format(fname))
+    print(f.read())
+    f.close()
+
+#Read Binary data.
+f=open("aa.png","rb") #already exist image
+b=f.read()
+print(b)
+f1=open("aaaa.png","wb") #image created from existing image
+f1.write(b)
+f1.close()
+
+
+
+
+#working with Directories/folders
+
+# to know current working directory
+# create new folder
+# Remove folder
+# rename folder
+#List all contents of folder
+
+# to know current working directory
+import os
+#a=os.getcwd()
+#print(a)
+
+#create new folder
+#os.mkdir("Todo")
+
+#how to create sub folders
+#os.mkdir("Todo/todo1/todo2")
+#os.rmdir("Todo/todo1/")  #used to remove one folder
+#remove folders
+#os.removedirs("Todo/todo1/todo2") #remove all sub folders
+
+#how to rename the folders
+#os.rename("Todo","today")
+
+#how to list all contents of dir
+
+#print(os.listdir())
+#print(os.system("py Demo.py"))
+
+#to create zip file
+from zipfile import *
+f=ZipFile("m.zip","w",ZIP_DEFLATED)
+f.write("abc.txt")
+f.write("ITVEDANT.txt")
+f.write("aa.png")
+f.close()
+"""
+#Unzip operations
+from zipfile import *
+f=ZipFile("m.zip",'r',ZIP_STORED)
+name=f.namelist()
+print(name)
+
+
