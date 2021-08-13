@@ -1,0 +1,232 @@
+# Dictionary 
+l=[1,2,3]
+- Unordered collection of items
+- We will have key-value pair elements.
+- "Key":"Value" 
+Eg:  "name":"ITVEDANT" 
+
+#how to create empty dictionry
+d={}
+d=dict()
+
+>>> d = {}
+>>> type(d)
+<class 'dict'>
+>>> d=dict()
+>>> type(d)
+<class 'dict'>
+>>> d = {"id":1,"Name":"ITVEDANT"}
+>>> type(d)
+<class 'dict'>
+>>> d1 = {1:"a",2:"b"}
+>>> type(d1)
+<class 'dict'>
+>>>
+d={"name":"ITVEDANT", "Phone":74777477} 
+
+>>> d={}
+>>> type(d)
+<class 'dict'>
+>>> d=dict()
+>>> type(d)
+<class 'dict'>
+>>> d={"name":"ITVEDANT", "Phone":74777477}
+>>> d
+{'name': 'ITVEDANT', 'Phone': 74777477}
+>>> d={1:"abc",2:"PQR",3:100}
+>>> d
+{1: 'abc', 2: 'PQR', 3: 100}
+>>> d={"name":"ITVEDANT","Phone":[9877677,8788765]}
+>>> d
+{'name': 'ITVEDANT', 'Phone': [9877677, 8788765]}
+>>> #Access the elements from dict
+>>> d['phone']
+Traceback (most recent call last):
+  File "<pyshell#12>", line 1, in <module>
+    d['phone']
+KeyError: 'phone'
+>>> d["Phone"]
+[9877677, 8788765]
+>>> d["Phone"][0]
+9877677
+>>> d["degree"]
+Traceback (most recent call last):
+  File "<pyshell#15>", line 1, in <module>
+    d["degree"]
+KeyError: 'degree'
+>>> d.get('degree')
+>>> d.get('Phone')
+[9877677, 8788765]
+>>> #Add and Modify elements
+>>> d["degree"]="M.Tech"
+>>> d
+{'name': 'ITVEDANT', 'Phone': [9877677, 8788765], 'degree': 'M.Tech'}
+>>> d["age"]=30
+>>> d
+{'name': 'ITVEDANT', 'Phone': [9877677, 8788765], 'degree': 'M.Tech', 'age': 30}
+>>> d["degree"]="B.Tech"
+>>> d
+{'name': 'ITVEDANT', 'Phone': [9877677, 8788765], 'degree': 'B.Tech', 'age': 30}
+>>> d.pop("age")
+30
+>>> d
+{'name': 'ITVEDANT', 'Phone': [9877677, 8788765], 'degree': 'B.Tech'}
+>>> d.pop()
+Traceback (most recent call last):
+  File "<pyshell#27>", line 1, in <module>
+    d.pop()
+TypeError: pop expected at least 1 arguments, got 0
+>>> d.popitem()
+('degree', 'B.Tech')
+>>> d.popitem()
+('Phone', [9877677, 8788765])
+>>> d
+{'name': 'ITVEDANT'}
+>>> d.clear()
+>>> d
+{}
+>>> del d
+>>> d
+Traceback (most recent call last):
+  File "<pyshell#34>", line 1, in <module>
+    d
+NameError: name 'd' is not defined
+>>> d={"Name":"ITVEDANT","age":30,"Degree":"M.Tech"}
+>>> a=d.copy()
+>>> a
+{'Name': 'ITVEDANT', 'age': 30, 'Degree': 'M.Tech'}
+>>> id(a)
+2118805493224
+>>> id(d)
+2118806317160
+>>> x=d
+>>> x
+{'Name': 'ITVEDANT', 'age': 30, 'Degree': 'M.Tech'}
+>>> id(d)
+2118806317160
+>>> id(x)
+2118806317160
+>>> a is d
+False
+>>> x is d
+True
+>>> d
+{'Name': 'ITVEDANT', 'age': 30, 'Degree': 'M.Tech'}
+>>> d.items()
+dict_items([('Name', 'ITVEDANT'), ('age', 30), ('Degree', 'M.Tech')])
+>>> d.keys()
+dict_keys(['Name', 'age', 'Degree'])
+>>> d.values()
+dict_values(['ITVEDANT', 30, 'M.Tech'])
+>>> dir(d)
+['__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'clear', 'copy', 'fromkeys', 'get', 'items', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values']
+>>> 
+
+
+
+>>> d={1:100,2:300}
+>>> d.setdefault(3:400)
+SyntaxError: invalid syntax
+>>> d.setdefault(3,400)
+400
+>>> d.setdefault(400)
+>>> d
+{1: 100, 2: 300, 3: 400, 400: None}
+>>> dir(d)
+['__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'clear', 'copy', 'fromkeys', 'get', 'items', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values']
+>>> s={}.fromkeys(["a","b","c"],10}
+SyntaxError: invalid syntax
+>>> s={}.fromkeys(["a","b","c"],10)
+>>> s
+{'a': 10, 'b': 10, 'c': 10}
+>>> s={}.fromkeys(["a","b","c"],10,20,30)
+Traceback (most recent call last):
+  File "<pyshell#9>", line 1, in <module>
+    s={}.fromkeys(["a","b","c"],10,20,30)
+TypeError: fromkeys expected at most 2 arguments, got 4
+>>> s={}.fromkeys(["a","b","c"],[10,20,20])
+>>> s
+{'a': [10, 20, 20], 'b': [10, 20, 20], 'c': [10, 20, 20]}
+>>> 
+>>> d2['phone'][0]
+9877665666
+>>> d2['Name'] = "IT"
+>>> d2
+{'id': 101, 'Name': 'IT', 'phone': [9877665666, 987665445]}
+>>> d2['phone'][0]=99988877766
+>>> d2
+{'id': 101, 'Name': 'IT', 'phone': [99988877766, 987665445]}
+>>> dir(d2)
+['__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'clear', 'copy', 'fromkeys', 'get', 'items', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values']
+>>> d2['id2']=2323232
+>>> d2
+{'id': 101, 'Name': 'IT', 'phone': [99988877766, 987665445], 'id2': 2323232}
+>>> d2.get("Name")
+'IT'
+>>> d2['degree')
+SyntaxError: invalid syntax
+>>> d2['degree']
+Traceback (most recent call last):
+  File "<pyshell#24>", line 1, in <module>
+    d2['degree']
+KeyError: 'degree'
+>>> d2.get('degree')
+>>> d2['id'] = 3
+>>> d2
+{'id': 3, 'Name': 'IT', 'phone': [99988877766, 987665445], 'id2': 2323232}
+>>> d3 = {1:(11,22,33)}
+>>> d3[1][0]
+11
+>>> d3[1][0]=122
+Traceback (most recent call last):
+  File "<pyshell#30>", line 1, in <module>
+    d3[1][0]=122
+TypeError: 'tuple' object does not support item assignment
+>>> d2 = {1:100, 2:200,1:300}
+>>> d2
+{1: 300, 2: 200}
+>>> d4 = {1:300,2:300,4:300}
+>>> d4
+{1: 300, 2: 300, 4: 300}
+>>> #If we take same keys then python consider last occurance of that key
+
+>>> a.setdefault("l",[1,2,3])
+[1, 2, 3]
+>>> aa
+Traceback (most recent call last):
+  File "<pyshell#88>", line 1, in <module>
+    aa
+NameError: name 'aa' is not defined
+>>> a
+{'name': 'ITVEDANT', 'id': 2, 'id1': 'id2', 'sal': 20000, 'age': None, 'l': [1, 2, 3]}
+>>> z=(1,2,3)
+>>> x = 0
+>>> dict.fromkeys(z,x)
+{1: 0, 2: 0, 3: 0}
+>>> s={}.fromkeys(["a","b","c"],10)
+>>> s
+{'a': 10, 'b': 10, 'c': 10}
+>>> s={}.fromkeys(["a","b","c"],10,11,12)
+Traceback (most recent call last):
+  File "<pyshell#95>", line 1, in <module>
+    s={}.fromkeys(["a","b","c"],10,11,12)
+TypeError: fromkeys expected at most 2 arguments, got 4
+>>> s={}.fromkeys(["a","b","c"],[11,111,122])
+>>> s
+{'a': [11, 111, 122], 'b': [11, 111, 122], 'c': [11, 111, 122]}
+>>> s={}.fromkeys(["a","b","c"],[[11,111,122],[11,11,11]])
+>>> s
+{'a': [[11, 111, 122], [11, 11, 11]], 'b': [[11, 111, 122], [11, 11, 11]], 'c': [[11, 111, 122], [11, 11, 11]]}
+>>> z=(1,2,3)
+>>> x=11,111,1111
+>>> type(x)
+<class 'tuple'>
+>>> dict.fromkey(z,x)
+Traceback (most recent call last):
+  File "<pyshell#103>", line 1, in <module>
+    dict.fromkey(z,x)
+AttributeError: type object 'dict' has no attribute 'fromkey'
+>>> dict.fromkeys(z,x)
+{1: (11, 111, 1111), 2: (11, 111, 1111), 3: (11, 111, 1111)}
+>>> dict.fromkeys(x,z)
+{11: (1, 2, 3), 111: (1, 2, 3), 1111: (1, 2, 3)}
