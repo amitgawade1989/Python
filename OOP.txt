@@ -1,0 +1,475 @@
+class:
+It is template o create the object
+It is collection of properties and function/methods
+Its a factory to create objects.
+
+Object:
+any real word entity.
+eg. Student
+
+class syntax:
+
+class ClassName:
+	"""Doc string"
+	variables/properties
+	functions
+	
+	
+"""
+#class demo.
+class Demo:
+    
+    pass
+
+print(Demo.__doc__) #prints doc string 
+
+class employee:
+    '''This is used to collect employee info'''
+    def info(self):
+        print("This is info function")
+
+#Types of variables
+#1 Instance variables(Object level varibales)
+#2. Static variables(Class level)
+#3. Local varibales(function level)
+
+#Types of Methods/function
+#1. Instance method
+#2. class method
+#3. static method
+
+
+class Student:
+    '''This is student info'''
+    def __init__(self): #instance method.
+        self.name="ITVEDANT"   #instance variable
+        self.age=30   #instance variable
+        self.marks=20  #instance variable
+
+    def display(self):    #instance method.
+        print(self.name)
+        print(self.age)
+        print(self.marks)
+
+
+#how to create object
+#objectname=classname()
+
+s=Student() #object is s   It internally calls __init__ method and this is called constructor.
+#constructor is used to initialize the obeject.
+s1=Student()
+print(id(s))
+print(id(s1))
+
+
+
+
+
+class Student:
+    '''This is student info'''
+    def __init__(self,a,b,c): #instance method.
+        self.name=a   #instance variable
+        self.age=b  #instance variable
+        self.marks=c #instance variable
+
+    def display(self):    #instance method.
+        print(self.name)
+        print(self.age)
+        print(self.marks)
+
+
+#how to create object
+#objectname=classname()
+
+s=Student("Amit",30,100) #object is s   It internally calls __init__ method and this is called constructor.
+#constructor is used to initialize the obeject.
+s1=Student("Aransh",20,99)
+
+#self point out current object.
+
+#to acces instance method we need to use object.method()
+s.display()
+s1.display()
+
+#how to access instance varibale outside the class.
+print(s.name)
+print(s1.marks)
+
+
+#Constructor
+#Special type of method
+# Name of the constructor is always __init__()
+#When we create the object automatically constructor will be called.
+#So it will initialize instance variables.
+#For every object constructor will be called at once.
+#constructor takes atleast one parameter i.e self.
+#eg
+
+class Student:
+    '''This is student info'''
+    def __init__(self,a,b,c): #constructor
+        self.name=a   #instance variable
+        self.age=b  #instance variable
+        self.marks=c #instance variable
+
+    def display(self):    #instance method.
+        print(self.name)
+        print(self.age)
+        print(self.marks)
+s=Student("a",20,100) #constructor will be called.
+
+#Types of variables
+
+#1. Instance varible
+#Varibales which are specific to object are called instance variables.
+#For every object seperate copy of varibales are created.
+
+#whre we can declare instance variables
+#1. inside constuctor
+#2. inside the instance method
+#3. outside of the class by using object name
+
+
+class Student:
+    '''This is student info'''
+    def __init__(self,a,b,c): #instance method.
+        self.name=a   #instance variable
+        self.age=b  #instance variable
+        self.marks=c #instance variable
+
+    def display(self):    #instance method.
+        print(self.name) #instance variable
+        print(self.age)
+        print(self.marks)
+        print(self.id)
+
+#how to create object
+#objectname=classname()
+
+s=Student("Amit",30,100) #object is s   It internally calls __init__ method and this is called constructor.
+#constructor is used to initialize the obeject.
+s1=Student("Aransh",20,99)
+print(s.marks)
+s.id=2  #Instance variable
+s.display()
+#instance method
+
+#So in above program display() is instance method.
+
+print(s.__dict__)
+
+
+
+
+
+#Static variable
+#If the value of the variable is not varied from object to object thebn such variables are called static variables
+#For entier class only one copy of the variable is available
+#we can access the static varibale either by class name or by object.
+class Test:
+    x=10  #static /class variable
+    def __init__(self):
+        self.a=20
+        Test.z=1000
+    def Demo(self):
+        Test.c=109
+
+t=Test()  #It calls constructor
+t1=Test()
+print(t.a)
+print(t1.a)
+print(Test.x)
+print(t.x)
+print(t1.x)
+Test.x=1000
+print(t.x)
+print(t1.x)
+t.x=10000
+print(Test.x)#1000
+print(t.x) #10000
+print(t1.x) #1000
+Test.a=100
+"""
+
+#where we can write static varibales and how
+class Test:
+    a=10   #this called static varible
+    def __init__(self):
+        Test.b=11
+    def m1(self): #instance method
+        Test.c=13
+    @classmethod #class method
+    def m2(cls):
+        cls.d=14
+        Test.f=15
+	
+	
+	def add(self):
+		pass
+    @staticmethod  #static method
+    def m3():
+        Test.e=100
+
+print(Test.__dict__)
+t=Test()
+print(Test.__dict__)
+t.m1()
+print(Test.__dict__)
+Test.m2()
+print(Test.__dict__)
+Test.m3()
+print(Test.__dict__)
+
+#Create class customer
+bankname as static variable
+deposite()
+withdraw() You can withdraw if bal>1000
+othert wise give error message.
+
+Accept bankdetails and display it with display()
+Perform deposite() and withdraw ()
+
+finally display final balance after each transaction
+
+
+
+
+
+class Customer:
+	bank="ABC"
+	def __init__(self):
+		self.bal=1000
+		self.name=input("Enter name")
+		self.accno=input("Enter Acc Number")
+		
+	def deposite(self):
+		amt=int(input("Enter amount to be deposited"))
+		self.bal+=amt
+		print("Amnt after deposite:",self.bal)
+	
+	def withdraw(self):
+		amt=int(input('Enter ammount to be withdraw"))
+		self.bal-=amt
+	def display(self):
+		print("Your acc bal is:",self.bal)
+		
+		
+	
+	
+"""
+class Person:
+    def __init__(self):
+        self.id=10
+        self.name="Amit"
+        self.age=30
+    def display(self):
+        print(self.id,self.name,self.age)
+
+
+class Student(Person):
+    pass
+#In Inheritance always create the object of child class
+
+s=Student()
+
+print(s.id)
+print(s.age)
+s.display()
+print(dir(s))
+
+
+
+class P(object): #this parent class
+    a=10
+    def __init__(self):
+        self.b=10
+    def m1(self):
+        print("This is parent class method")
+    @classmethod
+    def m2(cls):
+        print("This is parent class method")
+    @staticmethod
+    def m3():
+        print("This is parent static method")
+
+class C(P):
+    pass
+
+c=C()
+print(c.a)
+print(c.b)
+c.m1()
+c.m2()
+c.m3()
+
+
+
+
+
+class Person:
+    def __init__(self,id,name,age):
+        self.id=id
+        self.name=name
+        self.age=age
+    def m(self):
+        print("this is the method of Parent")
+    def display(self):
+        print(self.id,self.name,self.age)
+
+
+
+class Employee(Person):
+    def __init__(self,id,name,age,marks,school):
+        super().__init__(id,name,age)
+        super().display()  #we can call the method of super class
+        self.marks=marks
+        self.school=school
+    def display(self):
+        print(self.id,self.name,self.age,self.marks,self.school)
+    def m1(self):
+        print("This is the method oif chlid class")
+
+
+
+e=Employee(1,"Amit",30,100,"ITVEDANT")  #
+
+e.m()
+e.display()
+e.m1()
+
+#types of Inheritance
+#1. Single inheritance
+#Simple inheritance
+#In this one parent may have only one chlid class. 
+#above example is of single inheriatnce.
+
+#2. Multilevel inheritance.
+#In this one parent may have one clild and that child may have other child so here parent will act as grandparent for last chlid.
+class P:
+    def m1(self):
+        print("This is parent class method")
+class B(P):
+    def m2(self):
+        print("This is child class of P")
+class C(B):
+    def m3(self):
+        print("This is child of B and grand child of A")
+
+
+
+class Student:
+    def getDetails(self):
+        self.name=input("Enter name")
+        self.age=int(input("Enter age"))
+        self.gender=input("ENter Gender")
+    
+
+class Test(Student):
+    def getMarks(self):
+        self.maths=int(input("Enter the marks for math"))
+        self.Python=int(input("Enter the marks for python"))
+
+class Marks(Test):
+    def display(self):
+        print(self.name,self.age,self.gender,self.maths,self.Python)
+
+
+
+m=Marks()
+m.getDetails()
+m.getMarks()
+m.display()
+
+
+
+#Multiple Inheritance
+#In this We have multiple  parent and one child
+class TeamMember:
+    def __init__(self,name,uid):
+        self.name=name
+        self.uid=uid
+class Worker:
+    def __init__(self,pay,jobtitle):
+        self.pay=pay
+        self.jobtitle=jobtitle
+
+class TeamLeader(TeamMember,Worker):
+    def __init__(self,name,uid,pay,jobtitle,exp):
+        self.exp=exp
+        TeamMember.__init__(self,name,uid)
+        Worker.__init__(self,pay,jobtitle)
+    def display(self):
+        print(self.name,self.uid,self.pay,self.jobtitle,self.exp)
+
+tl=TeamLeader("Amit",1001,100000,"SPrintMaster",10)
+
+tl.display()     
+
+
+
+
+"""
+#Hybrid Inheritance
+
+class Parent(object):
+    def f1(self):
+        print("This is parent class")
+class Child(Parent):
+    def f2(self):
+        print("This is child class method")
+class XYZ(Parent):
+    def f3(self):
+        print("This is second child of Parent class")
+class Demo(Child,XYZ):
+    def f4(self):
+        print("This is method from xyz")
+
+
+d=Demo()
+d.f1()
+d.f2()
+d.f3()
+d.f4()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        
+	
+		
