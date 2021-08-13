@@ -1,0 +1,452 @@
+# Control Structures
+
+1. Conditional
+2. Looping
+3. branching
+
+1.Conditional 
+It is used to filter the data or used to give contraint/condition on execution of program 
+1. if
+2. if....else
+3. if...elif....else
+
+1. if 
+
+Syntax: 
+if condtion:
+	stmt1
+	stmt2
+	stmt3
+
+
+
+if (condition){
+
+stmt1
+stmy2
+stmn
+}
+
+
+
+if 2<3:
+  print("Hi")
+  print("Hiiii")
+  print("HHHH")
+  print("HHH")
+print("Outside the if")
+
+#if ....else
+
+if condition:
+	stmt1
+	stmt2
+else:
+	stmt1 of else
+	stmt2 of else
+
+#Program to check eligibility of voters
+
+age=eval(input("Enter age:"))
+
+if age>=18:
+    print("You can vote")
+    print("Your vote is valuable")
+else:
+    print("You can not")
+    print("Try next time")
+
+
+ 
+#if...elif...else
+#It is used to check multiple conditions.
+
+if condition:
+	stemts
+elif condition:
+	stmts
+elif condition:
+	ststms
+else:
+	stmts
+
+#marks     #grade
+
+#0 to 39     fail
+#40 to 50    pass
+#51 to 59    second class
+#60 to 74    first class
+#75 to 100   distinction
+    
+m=eval(input("Enter marks"))
+
+if m<=39:
+    print("Fail")
+elif m<=50:
+    print("Pass")
+elif m<=59:
+    print("Second class")
+elif m<=74:
+    print("First class")
+elif m<=100:
+    print("Distinction")
+else:
+    print("Enter marks properly")
+	
+Assinment1:
+customer wants to buy
+laptop: quantity>20  20% discount  
+keyboard: quantity>100  10%  discount
+mouse: quantity> 100  20% discount
+
+Assinment2
+#units     #bill
+
+#0 to 100          unit*0.5
+#101 to 200        unit*1.5
+#201 to 300        unit*2.5
+#301 to onwards    unit*3
+
+
+2. looping
+for loop 
+while loop 
+# if we want to execute some stmts again and again to get the solutuin then we use looping. 
+# it should be finite time
+
+
+
+# for loop:
+# syntax: 
+ for variable in sequence:
+	stmt1
+	stmt2
+	stmtn
+# for loop is smart to identify how many times we need to execute stmts. 
+Here sequence may be string, list, tuple or dictionay, range()  
+
+#ranage() is used to generate range of int only.
+By default range always start from 0 
+syntax:
+range(number_of_elements)
+range(5)-> 0,1,2,3,4 
+range(3,10)  3,4,5,6,7,8,9
+
+Here 3 included and 10 excluded
+range(start,end,step)
+range(4,10,2) 4,6,8
+
+
+for i in range(5):  #0,1,2,3,4
+    print(i)
+
+
+for i in range(1,10):  #1,1,2,3,4....9
+    print(i)
+
+for i in range(1,101):  #1,1,2,3,4....9
+    print("XYZ")
+
+
+l=[1,4,3,5,6,9]
+for i in l:
+    if i%2==0:
+        print("{} is even".format(i))
+    else:
+        print("{} is odd".format(i))
+
+#How we can use for loop for dictionary
+
+d={"Name":"ITVEDANT","age":30,"degree":"Phd"}
+
+for key,value in d.items():
+    print(key,":",value)
+
+
+
+#How we can use for loop for dictionary
+
+d={"Name":"ITVEDANT","age":30,"degree":"Phd"}
+
+for i in d:
+    print(i)
+
+
+#while loop
+
+init   (happnes only once)
+
+while condition:
+    stmt1
+    stmt2
+    stmt3
+    updation (imp)
+	
+	
+#Program to print first 10 natural numbers
+i=1
+while i<=10:
+    print(i)
+    i=i+1   #i+=1  #updation
+
+#Program to print first 10 odd numbers
+i=1
+while i<=20:
+    print(i)
+    i=i+2   #i+=1  #updation
+
+
+
+WAPP to print individual digits of given number.
+input-123
+output
+3
+2
+1
+
+
+
+n=int(input("Enter number:"))  #init
+
+while n!=0:
+    d=n%10
+    print(d)
+    n=n//10
+
+#WAPP to print the reverse number
+
+
+n=int(input("Enter number:"))  #init
+rev=0
+while n!=0:
+    d=n%10   #digit seperation
+    rev=rev*10+d   #logic
+    n=n//10   #updation it change the value of n to 0
+
+print(rev)
+
+i=1
+while n!=0:
+    
+    d=n%10#digit seperation
+    if i==1 or i==3:
+        print(d)   #logic
+    n=n//10   #updation it change the value of n to 0
+    i=i+1
+
+
+
+
+n=int(input('Enter number'))
+sum=0
+temp=n
+while n!=0:
+    d=n%10
+    sum=sum+d**3
+    n=n//10
+if temp==sum:
+    print("AArmstronge")
+else:
+    print("Not")
+
+
+
+
+Branching statements:
+It is also called Transfer control statements
+
+1. break
+It is used to terminate the loop. This termination is based on condition.
+for i in range(10):
+    if i==7:
+        print("I have satisfied the condition and now will terminate the loop")
+        break
+    print(i)
+print("I am outside")
+
+
+2. continue
+
+It is used to terminate current iteration of the loop. It will continue from next iterartion.
+
+for i in range(10):
+    if i==7:
+        print("I have satisfied the condition and now will terminate current iteration")
+        continue
+    print(i)
+print("I am outside")
+
+pass  :
+Used for nothing.
+It do nothing..
+
+
+
+cart=[10,20,40,5000,60]
+for items in cart:
+    pass
+
+def add():
+    pass
+
+def xyz():
+    pass
+
+
+# loops with else block 
+inside the loop execution, if break statement not executed then only else part will be executed.
+cart=[10,20,40,5000,60]
+for items in cart:
+    if items>1000:
+        break
+        print("This item is not valid")
+    print(items)
+else:
+    print("All items are valid")
+
+
+
+Pattern Program
+# for square pattern
+
+
+
+#* * * * *
+#* * * * *
+#* * * * *
+
+
+n=int(input("Enter Number of rows"))
+for  i in range(n):
+    print('* '*n)
+	
+
+n=int(input("Enter Number of rows"))
+for  i in range(n):
+    print('5 '*n)
+	
+
+#1 1 1 1
+#2 2 2 2
+#3 3 3 3
+#4 4 4 4 
+
+n=int(input("Enter Number of rows"))
+for i in range(n): #0,1,2,3
+    print((str(i+1)+" ")*n)
+	
+	
+	
+#1 1 1 1
+#2 2 2 2
+#3 3 3 3
+#4 4 4 4 
+
+n=int(input("Enter Number of rows"))
+for i in range(n): #0,1,2
+    print((str(i+1)+" ")*n)
+	
+	
+
+
+
+#A A A A
+#B B B B
+#C C C C
+#D D D D
+
+n=int(input("Enter Number of rows"))
+for i in range(n): #0,1,2,4
+    print((chr(65+i)+" ")*n)
+	
+	
+
+#1 2 3 4  
+#1 2 3 4
+#1 2 3 4
+#1 2 3 4
+
+n=int(input("Enter Number of rows"))
+for i in range(n): #0,1,2,3
+    for j in range(n): #0,1,2,3
+        print(str(j+1),end=" ")
+    print()
+    
+#Home work
+#A B C D
+#A B C D
+#A B C D
+#A B C D
+
+#5 4 3 2 1
+#5 4 3 2 1
+#5 4 3 2 1
+#5 4 3 2 1
+#5 4 3 2 1
+
+n=int(input("Enter Number of rows"))
+
+for i in range(n): #0,1,2,3,4
+    for j in range(n-1): #0,1,2,3,4
+        print(n-j,end=" ")
+    print()
+#Homework
+#E D C B A
+#E D C B A
+#E D C B A
+#E D C B A
+#E D C B A
+
+#*
+#* *
+#* * *
+#* * * *
+
+n=int(input("Enter Number of rows"))
+
+for i in range(n): #0,1,2,3
+    for j in range(i+1):#0,1,2,3
+        print("*",end=" ")
+    print()
+	
+	
+#* * * *
+#* * *
+#* *
+#*
+
+
+
+n=int(input("Enter Number of rows"))
+for i in range(n): #0,1,2,3
+    print(("*"+" ")*(n-i))
+
+#Homework
+ #1 1 1 1
+ #2 2 2
+ #3 3
+ #4
+
+
+#A A A A
+#B B B
+#C C
+#D 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
