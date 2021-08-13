@@ -1,0 +1,43 @@
+#Modules
+Collection of different variables, constants, functions and classes.
+#it is simple python file.
+We can use this collection at different places.
+This achives code resuablitity
+
+
+gerenarlly moudules are stored in lib folder. 
+#arithmatic.py
+def add(a,b):
+    return a+b
+
+def sub(a,b,c):
+    print(a-b-c)
+
+NAME="ITVEDANT"
+
+def mul(m,n):
+    return(m*n)
+	
+#demo.py
+import arithmatic
+print(arithmatic.add(2,3))
+arithmatic.sub(1,2,3)
+
+print(arithmatic.NAME)
+
+
+
+
+#Package 
+Package is collection of module.
+To identify this folder as package we need to create __init__.py(Empty file) in package folder.
+
+1. create foldef modu.
+store all related modules in it. 
+create __init__.py file in that folder.
+
+open new file and write
+from modu import module1,module2
+
+module1.fun()
+module2.fun()
