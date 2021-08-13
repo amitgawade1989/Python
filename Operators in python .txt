@@ -33,6 +33,168 @@ Binary Operators: It takes two operand for execution.
 >>> 3*2
 6
 >>> 4/2
+
+
+#Ternary Operator
+Syntax: 
+x = firstValue if condition else secondValue
+a,b=20.0,30
+a,b,c=1,2,3
+x = a if a<b else b
+
+Find min from three numbers
+a,b,c=1,2,3
+min = a if a<b and a<c else b if b<c else c
+
+
+# Special Operator 
+1. Identity Operator
+2. Membership Operator
+
+1. Identity Operator:
+#We can use this operator for address comparision
+a. is 
+b. is not
+
+Eg:
+r1 is r2 
+it returns True if Both r1 and r2 pointing to same Object(i.e Same Memory Location)
+a=10
+b=10
+a is b  -> True
+id(a)
+id(b)
+Both ids are same.
+
+l1=[1,2,3]
+l2=[1,2,3]
+print(l1 is l2)(Compares address)
+print(l1==l2)  (Whenevr we use == operator it compares elements from sequence)
+
+l2=l1 (Copied elemets from l1 to l2)
+print(l1 is l2)  (True)
+
+
+# Membership Operator
+We can check membership of perticular sequence like list tuple string or range
+1. in
+2. not in 
+
+l=[1,2,3]
+2 in l
+
+
+
+# Operator Precedance
+If Multiple operators comes together to solve any expression then which operator should execute 
+first that is called operator precedance. 
+1. ()  Parenthesis
+2. ** Exponential
+3. ~,- Bitwise Complement, unary minus
+4. *,/,%,// 
+5. +,-
+6. <<,>>
+7. &  
+8. ^
+9. |
+10. >,<,>=,<=,==,!=
+11. Assignment 
+12 is, is not
+13, in, not in
+14. not
+15. and
+16. or  
+
+15.0
+>>> a,b,c,d=30,30,10,5
+>>> a**(b+d)+c+a//b/(c+d)
+5.003154509899971e+51
+>>> a**(b+d)+c+a//b/(c+b)
+5.003154509899971e+51
+>>> a,b,c,d=30,20,10,5
+>>> a**(b+d)+c+a//b/(c+b)
+8.47288609443e+36
+>>> 30**25
+8472886094430000000000000000000000000
+>>> 30//20
+1
+>>> 0.033+10
+10.033
+>>> 10.033+30**25
+8.47288609443e+36
+>>> 30**25+10.033
+8.47288609443e+36
+>>> 3+2/3//4**2+4*(3*4)
+51.0
+>>> #How to accept input and how to print output
+>>> #output
+>>> print(9)
+9
+>>> a=10
+>>> print(a)
+10
+>>> print(2+3)
+5
+>>> a=3
+>>> b=4
+>>> c=a+b
+>>> print(c)
+7
+>>> print("Addition of a and b",c)
+Addition of a and b 7
+>>> print("Addition of x and y",c)
+Addition of x and y 7
+>>> print("Addition of a and b",x)
+Traceback (most recent call last):
+  File "<pyshell#24>", line 1, in <module>
+    print("Addition of a and b",x)
+NameError: name 'x' is not defined
+>>> print(a,b)
+3 4
+>>> a=2
+>>> b=3
+>>> c=a+b
+>>> print("Addition of {} and {} is {}".format(a,b,c))
+Addition of 2 and 3 is 5
+>>> print("Addition of {1} and {2} is {3}".format(a,b,c))
+Traceback (most recent call last):
+  File "<pyshell#30>", line 1, in <module>
+    print("Addition of {1} and {2} is {3}".format(a,b,c))
+IndexError: tuple index out of range
+>>> print("Addition of {0} and {1} is {2}".format(a,b,c))
+Addition of 2 and 3 is 5
+>>> print("Addition of {0} and {1} is {2}".format(a,b,c))
+Addition of 2 and 3 is 5
+>>> d=5
+>>> e=6
+>>> print("Addition of {0} and {1} is {2}".format(a,b,c,d,e))
+Addition of 2 and 3 is 5
+>>> print("Addition of {} and {} is {}".format(a,b,c,d,e))
+Addition of 2 and 3 is 5
+>>> z=c+d
+>>> print("Addition of {0} and {1} is {2}".format(a,b,a+b))
+Addition of 2 and 3 is 5
+>>> print("Addition of {0} and {1} is {2}".format(c,d,z))
+Addition of 5 and 5 is 10
+>>> # Study "Formating the output in python"
+Note: If We are having same priority operator for execution the then we should look from left side
+
+Eg. 
+a=30
+b=20
+c=10
+d=5
+((a+b)*c/d)
+(50/10*5)
+(500/5)
+100.0
+
+3/2*4+3+(10/5)**3-2
+
+a**(b+d)+c+a//b/(c+b)
+30**(25)+10+30//20/(30)
+30**(25)+10+1/(30)
+3+2/3//4**2+4*(3*4)
 2.0
 >>> 4.0/2
 2.0
