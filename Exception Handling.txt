@@ -1,0 +1,266 @@
+#exception handling
+Type of errors
+1. syntax errors
+2. Run time
+ 1. syntax:
+a=2
+if a==5
+	print(a)
+	
+	
+2. Run Time errors
+It is called Exceptions
+if someting goes wrong becz of
+1. end user's input
+2. programming logic
+3. memory problem 
+then it is called run time error.
+
+print(10/0)  #run time error
+
+#what is exception
+An unwanted and unexpected events that disturbs the normal flow of program is called exception
+Each exception is a class in python 
+eg. 
+ZeroDivisionError
+TypeError
+ValueError
+FileNotFoundError
+EOFError
+AttributeError
+
+It is recommended to handle exception. 
+
+#Mechanism to handle the exception
+We will use 
+try:
+except:
+else:
+finally
+blocks to handle exception.
+
+
+
+#python Exception Hirarcy
+(Forwarded image on whatsaap group)
+
+try:
+	#it is responsible for indentifying error from code. and handover it to next block.
+	#we write the code in try block where possibly error will occure.
+
+except:
+  #responsible to handle errors
+  #this always comes with try blocks
+
+Syntax:
+
+try:
+	stmt1
+	stmt2
+	stmt3
+except:
+	#code to handle errors
+
+
+
+"""
+print(10/2)
+print(10/0)
+print("I am able to execute")   #Abnormal termination
+"""
+try:
+    f=open("r.txt","r")
+except FileNotFoundError as e:
+    print(e)
+
+print("I am able to execute")
+"""
+print(10/2)
+print(10/0)
+print("I am able to execute")   #Abnormal termination
+"""
+try:
+    f=open("r.txt","W")
+	print(10/2)
+	print(10/0)
+except Exception as e:
+    print(e)
+
+print("I am able to execute")
+
+#we can have more than on except block
+try:
+    f=open("r1.txt","w")
+    print(10/2)
+    t=(1,2,3)
+    t.add(10)
+except FileNotFoundError as e:
+    print(e)
+except ZeroDivisionError as e:
+    print(e)
+except ValueError as v:
+    print(v)
+except Exception:
+    print("Tuple is immutable")
+
+print("I am able to execute")
+
+####################################
+a=int(input("Enter a"))
+b=int(input("Enter b"))
+
+try:
+    print(a/b)
+
+except Exception as e:
+    print(e)
+    
+######################################
+#Single except multiple errors
+a=int(input("Enter a"))
+b=int(input("Enter b"))
+
+try:
+    print(a/b)
+
+except (Exception,ZeroDivisionError, ValueError, AttributeError) as e:
+    print(e)
+
+#Finally block
+#It will execute in any situation(error occured or not)
+#gererally used to clean the code
+#it will come with try block or try except block
+
+try:
+    print("I am in try block")
+    print(10/0)
+except Exception:
+    print("Error")
+finally:
+    print("I am in finally")
+
+"""
+import os
+#following code will not execute finally.
+
+try:
+    print("Try")
+    os._exit(0)
+except NameError:
+    print("Except")
+finally:
+    print("finally")
+	
+
+#################
+#else
+#else block with try except and finally
+
+#else block will be executed if and only if there are no exception inside try block.
+#only once else will be allowed 
+
+try:
+    print(10/2)
+except Exception as e:
+    print(e)
+else:
+    print("All ok")
+finally:
+    print("Finally block")
+
+output:
+5.0
+All ok
+Finally block
+
+try:
+    print(10/0)
+except Exception as e:
+    print(e)
+else:
+    print("All ok")
+finally:
+    print("Finally block")
+output:
+division by zero
+Finally block
+
+
+
+# We have seen inbuild exception till.
+#lets understand userdefined exception..
+
+#every exception have its parent Exception class
+
+
+syntax:
+class classname(Exception):
+    def __init__(self,arg):
+        self.msg=arg
+"""
+class TooYoungException(Exception):
+    def __init__(self,arg):
+        self.msg=arg
+
+class TooOldException(Exception):
+    def __init__(self,arg):
+        self.msg=arg
+
+age=int(input("Enter age"))
+if age>65:
+    raise TooOldException("You are too old to marry")
+elif age<18:
+    raise TooYoungException("You are too young to marry")
+else:
+    print("You can Marry")
+	
+	
+	
+#assert statement
+#It is used to debug the program
+#syntax
+#assert condition,message
+
+def square(x):
+    return x**2
+
+assert square(2)== 4,"The square of 2 should be 4"
+assert square(3)== 19,"The square of 3 should be 9"
+print("Hi")
+output:
+Traceback (most recent call last):
+  File "D:/ITVendant/7-9batch/session14.py", line 106, in <module>
+    assert square(3)== 19,"The square of 3 should be 9"
+AssertionError: The square of 3 should be 9
+>>> 
+
+##############
+assert square(2)== 4,"The square of 2 should be 4"
+assert square(3)== 9,"The square of 3 should be 9"
+print("Hi")
+output
+hi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
