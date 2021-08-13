@@ -1,0 +1,63 @@
+#File Handling.
+collection of bytes that stores the data. 
+
+Tyeps of files
+1. Text files 
+2. Binary files.
+
+1. Text files : 
+
+#operations on files 
+1. create the file.
+2. open the file
+3. read
+4. write the file
+5. close the file
+
+1. create 
+open() is used to create the new file.
+
+file_pointer = open(filename , mode)
+
+Modes allowed in open function:
+1. "r" = open an existing file for read. file pointer is positioned at starting of file.
+         if file is not exist then it gives error. This is default mode. 
+2. "w" = open the existing file for write operations. If file is already exist and have some data in it,
+then it overrides that data. If specified file is not available then it creates the file.
+3. "a" = open an existing file for append opeartion. It will add the data at the end of the file.
+It is not going to override the data. if file is not avaialabel..then it creates it. 
+
+4. "r+" = To read and write the data into file. existing data will remain as it is. File pointer
+placed at beginning of file. 
+
+5. "w+" = write and then read file. Existing data is going to overide. 
+
+6. "a+" = append and read the data. will not overide the data. 
+7. x = used to open the file in exlusive creation mode for write. 
+if file is already exist then it gives file exist error. 
+
+#For binary file: 
+rb
+wb
+ab
+r+b
+w+b
+a+b
+xb
+
+
+f =open("ITVEDANT.txt","w")
+
+
+		 
+ 
+
+
+
+
+
+
+
+
+
+
