@@ -1,0 +1,719 @@
+#Functions
+Small task...
+
+to define function in python we use def keyword.
+Syntax:
+
+Function defination
+def function_name(parameters):
+	stmt1
+	stmt2
+	stmt3
+
+function_name(parameters)    #Function call
+"""
+def add():  #function defination
+    print(2+3)
+    
+add()  #function call
+
+
+#Function without parameters
+def reverse():
+    n=int(input("Enter Number"))
+    rev=0
+    while n!=0:
+        d=n%10
+        rev=rev*10+d
+        n=n//10
+    print(rev)
+
+reverse()
+
+#function with parameters
+def add(a,b):
+    print(a+b)
+
+add(2,3)
+
+def add(a,b):
+    print(a+b)
+
+add(2)  #it give error one postional parametr required
+
+
+
+
+
+def reverse(n):
+    rev=0
+    while n!=0:
+        d=n%10
+        rev=rev*10+d
+        n=n//10
+    print(rev)
+
+n=int(input("Enter Number"))
+reverse(n)
+
+#Function with return statement
+
+def add(a,b):
+    return a+b
+
+print(add(2,3))
+
+def reverse(n):
+    rev=0
+    while n!=0:
+        d=n%10
+        rev=rev*10+d
+        n=n//10
+    return rev
+
+n=int(input("Enter Number"))
+a=reverse(n)
+print(a)
+
+#In python we can return more than one values
+
+def add(a,b,c):
+    return a+b+c,a,b,c
+
+print(add(1,2,3))
+
+#when python returns multiple values then it returns in tuple.
+"""
+#by default it retuns None.
+def add():
+    print("Hi")
+
+print(add())
+
+def add():  #function defination
+    print(2+3)
+
+
+add()  #function call
+
+
+
+By default function Return None
+eg:
+#Return values
+def function(a,b):
+    print(a+b)  #in python we can return more than one values. These values will be return in tuple.
+
+
+print(function(2,3))
+a=function(1,44)
+print(a)
+
+5
+None
+45
+None
+
+
+def add(a,b):  #function defination and a, b are formal parameters
+    print(a+b)
+
+a=eval(input("Enter number"))
+b=eval(input("enter Number"))
+add(a,b)  #2, 3 are actual parameters
+
+#Return values
+def function(a,b):
+    return a+b,a,b  #in python we can return more than one values. These values will be return in tuple.
+
+
+print(function(2,3))
+a=function(1,44)
+print(a)
+out put
+(5, 2, 3)
+(45, 1, 44)
+
+
+#types of parameters
+
+1. posiitional argument'
+2. keyword 
+3. default
+4. Variable lenght arguments
+
+1. Positional arguments
+In this the posiition of argument is important.
+
+def sub(a,b):
+	print(a-b)
+	
+sub(2,3)
+sub(3,2)
+
+"""
+def sub(a,b):
+	print(a-b)
+	
+sub(2,3)
+sub(3,2)
+"""
+def greet(name,msg):
+    print(name,msg)
+
+greet("ITVEDANT","Good Evening")
+
+#Number of argument and position of argument must be match.
+#Supose if we change position then result will change
+#if we change number of argument it will raise error.
+
+2. Keyword based argument.
+
+
+#Wecan pass argument values by keys i.e argument/parameters name.
+
+def greet(name,msg):
+    print(name,msg)
+
+greet(name="ITVEDANT",msg="Good Evening")
+greet(msg="Good Evening",name="ITVEDANT")
+greet("ITVEDANT",msg="Good Evening")
+greet(name="ITVEDANT","Good Evening") #this is invalid
+
+
+#Keyword argument always comes after positional argument
+
+#Default argument
+#some times we can provide default arguments to positional arguments.
+
+def greet(name="Guest",msg="Hello"):
+    print(name,msg)
+
+
+
+greet()
+
+greet("Good evening")
+
+greet("Amit","GE")
+Output:
+Guest Hello
+Good evening Hello
+
+
+
+def greet(name="Guest",msg):  #error
+    print(name,msg)
+
+
+
+greet()
+
+greet("Good evening")
+
+greet("Amit","GE")
+
+#Above function will give error. beccz mdefault argument folollows non default argument
+
+
+#Variable lenght arguments
+
+	We can declare variable lenght argument with * operator.
+
+	def f1(*n):
+		stmt1
+		stmt2
+
+f1()
+f1(arg1)
+f1(arg1,arg2)
+f1(arg1,arg2,arg3....)
+
+""""
+def printnumbers(*n):
+    print(type(n))
+    for i in n:
+        print(i)
+
+
+#printnumbers()
+#printnumbers(1)
+#printnumbers(1,2)
+printnumbers(11,12,13,14,15)
+"""
+def sum(*n):
+    total=0
+    for i in n:
+        total=total+i
+    print(total)
+
+#sum()
+sum(1,2)
+sum(1,2,3,4)
+
+
+
+def add(a,b):
+	print(a+b)
+
+
+x=2
+z=4
+add(x,
+#we can mix these arguments with positional arguments.
+""""
+def printnumbers(*n):
+    print(type(n))
+    for i in n:
+        print(i)
+
+
+#printnumbers()
+#printnumbers(1)
+#printnumbers(1,2)
+printnumbers(11,12,13,14,15)
+
+def sum(*n):
+    total=0
+    for i in n:
+        total=total+i
+    print(total)
+
+#sum()
+sum(1,2)
+sum(1,2,3,4)
+
+def f1(n1,*s):
+    print("this is n1",n1)
+    print(s)
+    for s1 in s:
+        print(s1)
+
+#f1(10)
+#f1(10,20)
+f1(10,20,30,40)
+"""
+
+def f1(*s,n1):
+    print("this is n1",n1)
+    print(s)
+    for s1 in s:
+        print(s1)
+
+
+
+#f1(10)
+#f1(10,20)
+f1(10,20,30,n1=40)
+
+
+
+def fun(a,b,c=4,d=8):
+    print(a,b,c,d)
+
+#fun(3,2)
+#fun(11,22,33,44)
+#fun(25,50,d=100)
+#fun(d=11,a=22,b=3)
+#fun()   Error
+#fun(a=2,b=3,2,3)   Error
+#fun(3,4,a=2,b=3)    #multiple assignments for a and b
+#fun(4,5,a=3)  #error
+fun(4,5,c=10,e=20)  #error
+
+#TYypes of Variables
+
+
+1. global
+2. local
+
+1. global:
+    Variables which are outside the fun is called gloabal var.
+    These variables can be access in the file/module.
+
+a=10  #global 
+def fun():
+    print(a)
+fun()
+
+
+1. global:
+    Variables which are outside the fun is called global var.
+    These variables can be access in the file/module.
+
+a=10   #global variable
+def fun():
+    print(a)
+fun()
+
+"""
+#We can use global keyword  to declare global variable inside the function.so that we can access this variable from other fun
+
+a=10
+def fun():
+    global a
+    a=999   
+    print(a)
+    
+def fun1():
+    print(a)
+
+fun()   #999
+fun1()  #999
+
+
+
+2. local variable
+#veriable declared inside the fun is called local variable
+#it can not be used outside the function.
+
+a=10
+def fun():
+    a=999   #local variable
+    print(a)
+    
+def fun1():
+    print(a)
+
+fun()   #999
+fun1()  #10
+>>> a=10
+>>> def fun():
+	print(a)
+
+>>> fun()
+10
+
+>>> def fun():
+	global a
+	a=999
+	b=20
+	print(a,b)
+
+>>> fun()
+999 20
+>>> print(a)
+999
+>>> print(b)
+Traceback (most recent call last):
+  File "<pyshell#14>", line 1, in <module>
+    print(b)
+NameError: name 'b' is not defined
+>>> a=10
+>>> def fun():
+	a=100
+	b=19
+	print(a,b)
+
+>>> fun()
+100 19
+>>> print(a)
+10
+>>> 
+
+#anonymous function
+#Function without name is called anaonymous function
+#we use lambda keyword to define this function.
+
+def square(n):
+    return n*n
+
+print(square(20))
+
+
+
+#With lambda function
+variable = lambda variablelist: expression 
+
+
+a=lambda n:n*n
+print(a(4))
+#Syntax:
+#objectname=lambda argumentlist:expression
+#Note: we can have n number of arguments but only one expression.
+
+
+a=lambda a,b,c=3:a+b+c
+print(a(2,3))
+
+"""
+#find largest number using lambda function
+
+a=lambda a,b,c: a if a>b and a>c else b if b>c else c
+print(a(2,3,4))
+
+
+#filter()
+#It is used to filter the data.
+# we can use it with lambda
+#Syntax
+#filter(function,sequence)
+#We need to convert filter object in to list or tuple.
+def isEven(x):
+    if x%2==0:
+        return True
+    else:
+        return False
+
+l=[1,2,3,4,5]
+l1=list(filter(isEven,l))
+print(l1)
+
+l2=list(filter(lambda x:x%2==0,l))
+print(l2)
+
+
+
+#map()
+
+#For every element we perform some operation and we generate new elements.
+l=[1,2,3,4]
+def doublenum(x):
+    return x*2
+
+def isEven(x):
+    if x%2==0:
+        return True
+    else:
+        return False
+
+result=list(map(isEven,l))
+print(result)  #False, True, False, True
+
+result=list(map(doublenum,l))
+print(result)  # 1,4,6,8
+
+"""
+
+#reduce()
+#Reduce function reduces the sequence of elements into single element.
+#Syntax:
+#reduce(function,sequence)
+#This reduce function is present in functools module.
+
+from functools import reduce
+
+l=[1,2,3,4,6,10,1,3,4]
+result=reduce(lambda x,y:x+y,l)
+print(result)
+
+
+>>> a=lambda n:n*n
+>>> a(4)
+16
+>>> a = lambda a,b,c:a+b+c
+>>> a(1,2,3)
+6
+>>> fun = lambda a,b,c:a+b+c
+>>> fun(1,2,3)
+6
+>>> fun = lambda a,b:if a<b
+SyntaxError: invalid syntax
+>>> fun = lambda a,b:(if a<b)
+SyntaxError: invalid syntax
+>>> def isEven(x):
+	if x%2==0:
+		return True
+	else:
+		return False
+
+>>> a=filter(isEven,[1,2,3,4])
+>>> a
+<filter object at 0x0000026ABEA12D48>
+>>> a=list(filter(isEven,[1,2,3,4]))
+>>> a
+[2, 4]
+>>> a = list(filter(lambda x:x%2==0,[1,2,3,4]))
+>>> a
+[2, 4]
+>>> l=[1,2,3,4]
+>>> a = list(filter(lambda x:x%2==0,l))
+>>> a
+[2, 4]
+>>> a=list(map(isEven,l))
+>>> a
+[False, True, False, True]
+>>> a = list(map(lambda x:x**2,[1,2,3,4]))
+>>> a
+[1, 4, 9, 16]
+>>> a = list(filter(lambda x:X%2==0,range(0,101)))
+Traceback (most recent call last):
+  File "<pyshell#28>", line 1, in <module>
+    a = list(filter(lambda x:X%2==0,range(0,101)))
+  File "<pyshell#28>", line 1, in <lambda>
+    a = list(filter(lambda x:X%2==0,range(0,101)))
+NameError: name 'X' is not defined
+>>> a = list(filter(lambda x:x%2==0,range(0,101)))
+>>> a
+[0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100]
+>>> a = list(filter(lambda x:X%2==0,{1,2,3,4}))
+Traceback (most recent call last):
+  File "<pyshell#31>", line 1, in <module>
+    a = list(filter(lambda x:X%2==0,{1,2,3,4}))
+  File "<pyshell#31>", line 1, in <lambda>
+    a = list(filter(lambda x:X%2==0,{1,2,3,4}))
+NameError: name 'X' is not defined
+>>> a = list(filter(lambda x:x%2==0,{1,2,3,4}))
+>>> a
+[2, 4]
+>>> a = list(filter(lambda x:x%2==0,(1,2,3,4)))
+>>> a
+[2, 4]
+>>> #how to use anaonymous function on dict.
+>>> #reduce()
+>>> from functool import reduce
+Traceback (most recent call last):
+  File "<pyshell#38>", line 1, in <module>
+    from functool import reduce
+ModuleNotFoundError: No module named 'functool'
+>>> from funtool import reduce
+Traceback (most recent call last):
+  File "<pyshell#39>", line 1, in <module>
+    from funtool import reduce
+ModuleNotFoundError: No module named 'funtool'
+>>> from functools import reduce
+>>> l=[1,2,3,4,6,10,1,3,4]
+>>> result=reduce(lambda x,y:x+y,l)
+>>> result
+34
+>>> n=int(input("Enter n:"))
+Enter n:10
+>>> result=reduce(lambda x,y:x+y,range(n))
+>>> result
+45
+>>> l=[1,2,3,4]
+>>> name =['a','b','c','d']
+>>> a=zip(l,name)
+>>> a
+<zip object at 0x0000026ABE9DD048>
+>>> for i in a:
+	print(i)
+
+(1, 'a')
+(2, 'b')
+(3, 'c')
+(4, 'd')
+>>> list(a)
+[]
+>>> a
+<zip object at 0x0000026ABE9DD048>
+>>> b=zip(l,(11,22,33,44))
+>>> b
+<zip object at 0x0000026ABEA9AB08>
+>>> for i in b:
+	print(i)
+
+(1, 11)
+(2, 22)
+(3, 33)
+(4, 44)
+>>> b=zip(l,{11,22,33,44})
+>>> b
+<zip object at 0x0000026ABCC606C8>
+>>> for i in b:
+	print(i)
+
+(1, 33)
+(2, 11)
+(3, 44)
+(4, 22)
+>>> a=[1,2,3]
+>>> b=[11,22,33,44]
+>>> z=zip(a,b)
+>>> z
+<zip object at 0x0000026ABCC64608>
+>>> for i in z:
+	print(i)
+
+(1, 11)
+(2, 22)
+(3, 33)
+>>> #will not raise error
+>>> z=list(zip(a,b))
+>>> z
+[(1, 11), (2, 22), (3, 33)]
+>>> z[0]
+(1, 11)
+>>> z = tuple(zip(a,b))
+>>> z
+((1, 11), (2, 22), (3, 33))
+>>> z= dict(zip(a,b))
+>>> z
+{1: 11, 2: 22, 3: 33}
+>>> z=set(zip(a,b))
+>>> z
+{(2, 22), (1, 11), (3, 33)}
+>>> a=[1,2,3,4]
+>>> b=[1,2,3]
+>>> z=dict(zip(a,b))
+>>> z
+{1: 1, 2: 2, 3: 3}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Function Program
+def Palindrome(n):
+    temp=n
+    rev=0
+    while n!=0:
+        d=n%10
+        rev=rev*10+d
+        n=n//10
+    if rev==temp:
+        print("Palindrome")
+    else:
+        print("Not Palindrome")
+
+
+#n=eval(input("Enter Number"))
+#Palindrome(n)
+
+
+def Palindrome1(n):
+    temp=n
+    rev=0
+    while n!=0:
+        d=n%10
+        rev=rev*10+d
+        n=n//10
+    if rev==temp:
+        return True
+    else:
+        return False
+
+
+n=eval(input("Enter Number"))
+a=Palindrome1(n)
+if a==True:
+    print("Number is palindrome")
+else:
+    print("Not")
