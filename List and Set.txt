@@ -1,0 +1,451 @@
+# List   
+
+List is the collection of differnt types of elements. 
+List represents differnt object as single entity
+List also have Indexing and index starts from 0
+List enclosed in [ ] 
+list() used to create emplyt list 
+list is mutable object ( once created it can be changed)
+1. a=list()
+a=[]
+here a is emplyt list
+a=[1,2,3]
+   0 1 2 
+a[0]  -> 1
+a[1] -> 2
+a[2]  -> 3
+
+s=[1,2,2.2,"ITVEDANT"]
+   0 1 2     3 
+# List supports negative indexing starts from -1. 
+
+type(a)
+<class 'lst'>
+a=[1,2,3]
+a=[1,2.2,3,[1,2,3]]
+a=[1,2.2,"IT",3,[1,2,3],(2,3,4)]
+a[4][1] -> 2
+a[4] -> [1,2,3]
+>>> l=[] #empty list
+>>> type(l)
+<class 'list'>
+>>> a= list()
+>>> type(a)
+<class 'list'>
+>>> l = [1,2,3,4]
+>>> type(l)
+<class 'list'>
+>>> l= [1,2,3,"ITVEDANT",2.2,2+4j,True]
+>>> type(l)
+<class 'list'>
+>>> l= [1,2,3,"ITVEDANT",2.2,2+4j,True,[11,12,13,14]]
+>>> type(l)
+<class 'list'>
+>>> len(l)
+8
+>>> 
+
+range() function  
+It is used to generate int range.
+By default it starts from 0 
+Syntax: 
+range(elements) ->  How many elements  generates
+range(start,end,step)
+
+# how to access elements of list. 
+1. by indexing 
+
+s=[1,2,2.2,"ITVEDANT"]
+   0 1 2     3 
+s[0]   1
+s[1]   2
+s[3]   ITVEDANT
+
+a=[1,2,[1,2,3],(1.1,2.2,3.3)]
+len(a) 
+a[1]  2
+a[2]   [1,2,3]
+a[2][1]  2  
+a[3][1]
+
+slicing: 
+syntax:
+s[start:end:step]
+here start is starting of string
+end is end of string
+and step is how to select element for dispaly.(By default step is 1. it means it will consider all elements from string to print
+if step is 2 then it will skip one element n will consider next one 
+if step is 3 then it will skip 2 element
+if index is not present then it will not give any error.
+
+Note: Sign of step is important for slicing.
+Rules: Rules are based on sign of steps.
+
+If step sign is positive
+start=start 
+end=end-1
+go in forward direction means from left to write
+
+if step value is negative 
+start=start
+end=end+1
+go in backward direction (from right to left)
+1=[1,2,3,4,5,6]
+
+a[2:4:1]
+
+
+#List mutability 
+a=[1,2,3,4]
+pirnt(a)
+-> [1,2,3,4]  
+a[2]=100
+print(a)
+[1,2,100,4] 
+
+#count()
+Used to count freq of elements
+a.count(100) -> 1
+
+
+>>> l=[] #empty list
+>>> type(l)
+<class 'list'>
+>>> a= list()
+>>> type(a)
+<class 'list'>
+>>> l = [1,2,3,4]
+>>> type(l)
+<class 'list'>
+>>> l= [1,2,3,"ITVEDANT",2.2,2+4j,True]
+>>> type(l)
+<class 'list'>
+>>> l= [1,2,3,"ITVEDANT",2.2,2+4j,True,[11,12,13,14]]
+>>> type(l)
+<class 'list'>
+>>> len(l)
+8
+>>> dir(l)
+['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort']
+>>> l[0]
+1
+>>> l[4]
+2.2
+>>> l[8]
+Traceback (most recent call last):
+  File "<pyshell#14>", line 1, in <module>
+    l[8]
+IndexError: list index out of range
+>>> l[-1]
+[11, 12, 13, 14]
+>>> l[7][0]
+11
+>>> l=[1]
+>>> len(l)
+1
+>>> l[0]
+1
+>>> l= [1,2,3,"ITVEDANT",2.2,2+4j,True,[11,12,13,14]]
+>>> l[1:6:2]
+[2, 'ITVEDANT', (2+4j)]
+>>> l[6:2:1]
+[]
+>>> l[6:2:-1]
+[True, (2+4j), 2.2, 'ITVEDANT']
+>>> l[::-1]
+[[11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 3, 2, 1]
+>>> l
+[1, 2, 3, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14]]
+>>> l[5:7]
+[(2+4j), True]
+>>> dir(l)
+['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort']
+>>> l.add(100)
+Traceback (most recent call last):
+  File "<pyshell#28>", line 1, in <module>
+    l.add(100)
+AttributeError: 'list' object has no attribute 'add'
+>>> l.append(100)
+>>> l
+[1, 2, 3, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14], 100]
+>>> l.count(1)
+2
+>>> l.count(2)
+1
+>>> l.count(100)
+1
+>>> l.("AA")
+SyntaxError: invalid syntax
+>>> l.count("aa")
+0
+>>> l.append([12,13,14])
+>>> l
+[1, 2, 3, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14], 100, [12, 13, 14]]
+>>> l.extend([11,22,33])
+>>> l
+[1, 2, 3, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14], 100, [12, 13, 14], 11, 22, 33]
+>>> l.index(1)
+0
+>>> l.index([1,2,3])
+Traceback (most recent call last):
+  File "<pyshell#41>", line 1, in <module>
+    l.index([1,2,3])
+ValueError: [1, 2, 3] is not in list
+>>> l.index(100)
+8
+>>> l.find(100)
+Traceback (most recent call last):
+  File "<pyshell#43>", line 1, in <module>
+    l.find(100)
+AttributeError: 'list' object has no attribute 'find'
+>>> l.update(111)
+Traceback (most recent call last):
+  File "<pyshell#44>", line 1, in <module>
+    l.update(111)
+AttributeError: 'list' object has no attribute 'update'
+>>> l.insert(10)
+Traceback (most recent call last):
+  File "<pyshell#45>", line 1, in <module>
+    l.insert(10)
+TypeError: insert() takes exactly 2 arguments (1 given)
+>>> l.insert(101,5)
+>>> l
+[1, 2, 3, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14], 100, [12, 13, 14], 11, 22, 33, 5]
+>>> l.insert(3,1000)
+>>> l
+[1, 2, 3, 1000, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14], 100, [12, 13, 14], 11, 22, 33, 5]
+>>> l.insert(0,122)
+>>> l
+[122, 1, 2, 3, 1000, 'ITVEDANT', 2.2, (2+4j), True, [11, 12, 13, 14], 100, [12, 13, 14], 11, 22, 33, 5]
+>>> #l.insert(position,value)
+>>> l.count()
+Traceback (most recent call last):
+  File "<pyshell#53>", line 1, in <module>
+    l.count()
+TypeError: count() takes exactly one argument (0 given)
+>>> l.count(1000)
+1
+>>> l.count([11,12,13,14])
+1
+>>> l.count("A")
+0
+>>> l.count("AA")
+0
+>>> dir(l)
+['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort']
+>>> l.reverse()
+>>> l
+[5, 33, 22, 11, [12, 13, 14], 100, [11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 1000, 3, 2, 1, 122]
+>>> l.sort(reverse=False)
+Traceback (most recent call last):
+  File "<pyshell#61>", line 1, in <module>
+    l.sort(reverse=False)
+TypeError: '<' not supported between instances of 'list' and 'int'
+>>> a=[5,3,2,6,1]
+>>> a.sort()
+>>> a
+[1, 2, 3, 5, 6]
+>>> b=[4,1,2,4,3]
+>>> b.sort(reverse=True)
+>>> b
+[4, 4, 3, 2, 1]
+>>> sorted(a)
+[1, 2, 3, 5, 6]
+>>> l.pop()
+122
+>>> p=['a','d','e','b']
+>>> p.sort()
+>>> p
+['a', 'b', 'd', 'e']
+>>> p
+['a', 'b', 'd', 'e']
+>>> l
+[5, 11, 22, 33, [12, 13, 14], 100, [11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 1000, 3, 2, 1]
+>>> l.pop()
+1
+>>> l.pop()
+2
+>>> l
+[5, 11, 22, 33, [12, 13, 14], 100, [11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 1000, 3]
+>>> l.pop()
+3
+>>> l.remove(100)
+>>> l
+[5, 11, 22, 33, [12, 13, 14], [11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 1000]
+>>> l.pop(1)
+11
+>>> l
+[5, 22, 33, [12, 13, 14], [11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 1000]
+>>> l.remove()
+Traceback (most recent call last):
+  File "<pyshell#83>", line 1, in <module>
+    l.remove()
+TypeError: remove() takes exactly one argument (0 given)
+>>> a=l.copy()
+>>> a
+[5, 22, 33, [12, 13, 14], [11, 12, 13, 14], True, (2+4j), 2.2, 'ITVEDANT', 1000]
+>>> id(a)
+2156777284488
+>>> id(l)
+2156748934728
+>>> a=[1,2,3]
+>>> b=[1,2,3]
+>>> id(a)
+2156780424584
+>>> id(b)
+2156748932680
+>>> a=b
+>>> id(a)
+2156748932680
+>>> id(b)
+2156748932680
+>>> 
+
+
+
+#Set
+>>> #set
+>>> s=set()
+>>> type(s)
+<class 'set'>
+>>> s={1,2,3}
+>>> type(s)
+<class 'set'>
+>>> s={1,1,2,3}
+>>> s
+{1, 2, 3}
+>>> type(s)
+<class 'set'>
+>>> s={3,2,2,1}
+>>> s
+{1, 2, 3}
+>>> s[0]
+Traceback (most recent call last):
+  File "<pyshell#10>", line 1, in <module>
+    s[0]
+TypeError: 'set' object is not subscriptable
+>>> s={}
+>>> type(s)
+<class 'dict'>
+>>> s={1,2.2,1,3,"IT",(3+4j)}
+>>> s
+{1, 2.2, 3, 'IT', (3+4j)}
+>>> dir(s)
+['__and__', '__class__', '__contains__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__iand__', '__init__', '__init_subclass__', '__ior__', '__isub__', '__iter__', '__ixor__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__or__', '__rand__', '__reduce__', '__reduce_ex__', '__repr__', '__ror__', '__rsub__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__xor__', 'add', 'clear', 'copy', 'difference', 'difference_update', 'discard', 'intersection', 'intersection_update', 'isdisjoint', 'issubset', 'issuperset', 'pop', 'remove', 'symmetric_difference', 'symmetric_difference_update', 'union', 'update']
+>>> s.add(34)
+>>> s
+{1, 2.2, 3, 'IT', 34, (3+4j)}
+>>> s.add(222)
+>>> s
+{1, 2.2, 3, 'IT', 34, (3+4j), 222}
+>>> s.add(0)
+>>> s
+{0, 1, 2.2, 3, 'IT', 34, (3+4j), 222}
+>>> s.update([11,12,13])
+>>> s
+{0, 1, 2.2, 3, 'IT', 34, 11, 12, 13, (3+4j), 222}
+>>> s.update((111,112,113))
+>>> s
+{0, 1, 2.2, 3, 'IT', 34, 11, 12, 13, (3+4j), 111, 112, 113, 222}
+>>> s.update([[1,2],2222])
+Traceback (most recent call last):
+  File "<pyshell#26>", line 1, in <module>
+    s.update([[1,2],2222])
+TypeError: unhashable type: 'list'
+>>> s1={[1,2],3,4}
+Traceback (most recent call last):
+  File "<pyshell#27>", line 1, in <module>
+    s1={[1,2],3,4}
+TypeError: unhashable type: 'list'
+>>> s={2.2.1,5}
+SyntaxError: invalid syntax
+>>> s={1.1,2,2.2}
+>>> s
+{1.1, 2, 2.2}
+>>> dir(s)
+['__and__', '__class__', '__contains__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__iand__', '__init__', '__init_subclass__', '__ior__', '__isub__', '__iter__', '__ixor__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__or__', '__rand__', '__reduce__', '__reduce_ex__', '__repr__', '__ror__', '__rsub__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__xor__', 'add', 'clear', 'copy', 'difference', 'difference_update', 'discard', 'intersection', 'intersection_update', 'isdisjoint', 'issubset', 'issuperset', 'pop', 'remove', 'symmetric_difference', 'symmetric_difference_update', 'union', 'update']
+>>> s={1,2,{1,2,3}}
+Traceback (most recent call last):
+  File "<pyshell#32>", line 1, in <module>
+    s={1,2,{1,2,3}}
+TypeError: unhashable type: 'set'
+>>> s
+{1.1, 2, 2.2}
+>>> s={1,2,3,4,5}
+>>> s.remove(3)
+>>> s
+{1, 2, 4, 5}
+>>> s.remove(11)
+Traceback (most recent call last):
+  File "<pyshell#37>", line 1, in <module>
+    s.remove(11)
+KeyError: 11
+>>> s.discard(1)
+>>> a
+Traceback (most recent call last):
+  File "<pyshell#39>", line 1, in <module>
+    a
+NameError: name 'a' is not defined
+>>> s
+{2, 4, 5}
+>>> s.discard(11)
+>>> s
+{2, 4, 5}
+>>> s.pop()
+2
+>>> s.pop(2)
+Traceback (most recent call last):
+  File "<pyshell#44>", line 1, in <module>
+    s.pop(2)
+TypeError: pop() takes no arguments (1 given)
+>>> s.pop()
+4
+>>> s
+{5}
+>>> s={1,2,3,4}
+>>> p={3,4,5,6}
+>>> s.union(p)
+{1, 2, 3, 4, 5, 6}
+>>> s&p
+{3, 4}
+>>> s|p
+{1, 2, 3, 4, 5, 6}
+>>> s.intersection(p)
+{3, 4}
+>>> s.difference(p)
+{1, 2}
+>>> p.difference(s)
+{5, 6}
+>>> s.symmetric_difference(p)
+{1, 2, 5, 6}
+>>> a=frozenset(s)
+>>> type(a)
+<class 'frozenset'>
+>>> a.add(10)
+Traceback (most recent call last):
+  File "<pyshell#58>", line 1, in <module>
+    a.add(10)
+AttributeError: 'frozenset' object has no attribute 'add'
+>>> a.update([1,2,3])
+Traceback (most recent call last):
+  File "<pyshell#59>", line 1, in <module>
+    a.update([1,2,3])
+AttributeError: 'frozenset' object has no attribute 'update'
+>>> a.pop()
+Traceback (most recent call last):
+  File "<pyshell#60>", line 1, in <module>
+    a.pop()
+AttributeError: 'frozenset' object has no attribute 'pop'
+>>> a.remove()
+Traceback (most recent call last):
+  File "<pyshell#61>", line 1, in <module>
+    a.remove()
+AttributeError: 'frozenset' object has no attribute 'remove'
+>>> dir(a)
+['__and__', '__class__', '__contains__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__or__', '__rand__', '__reduce__', '__reduce_ex__', '__repr__', '__ror__', '__rsub__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__xor__', 'copy', 'difference', 'intersection', 'isdisjoint', 'issubset', 'issuperset', 'symmetric_difference', 'union']
+>>> 
+
+
+
+
+
