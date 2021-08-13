@@ -1,0 +1,303 @@
+#Python Programming: 
+Notes: 
+
+Tokens:   (Words in normal lang)
+
+1. Identifiers
+2. Variables
+3. constant
+4. Keywords
+5. datatypes
+6. Operators
+
+1. Identifiers
+- Name given by user in program is called identifiers
+- It may be variable name, fun name, class name, cont name.
+a=2
+name="Amit"
+def fun():
+	stmt1
+	stmt2
+a,name,fun are identifiers
+
+Rules to define identifiers
+1. It must start with alphabets or '_'
+2. It should not start with digits
+3. These are case sensitive 
+4. should not start with symbols except '_'
+5. We should not give space in between two words
+
+Eg: 
+a=2  Valid
+0a=2  Not valid
+a0=2 valid
+name12="amit" valid
+12name="xyz" invalid
+_a=10 valid
+-a=10  invalid
+today day="Monday" in valid
+today_day="Monday"  valid
+
+
+2. Variables
+- It is the temporay name given by user to store data temporarly
+- It is referenc to perticular object
+- During the program we can change the value of variables
+Syntax:
+variable_name=value
+- It should follow all rules of identifiers.
+eg. 
+a=2
+id() is used to check memory location of identifier.
+
+
+3. Keywords/ reserved words
+- These words are already reserved by python software. we can not modify that.
+- There are 35 keywords available
+import keyword
+keyword.kwlist
+
+4. constant
+- There is no constant concept in python
+- But if you want to use constant in your prog then it should be written in Capital
+NAME="amit" 
+
+
+5. Datatypes:
+- it defines the type of data to be stored in memory
+- no need to define datatype explicitly in python.
+1. int  -integer
+2. float  - decimal
+3.complex (2+4j) (int + imagnary)
+4. bool  True / False  0 and 1
+5. str     String/alphabets 
+6. range
+7. list
+8. tuple
+9. dict
+10. set 
+
+################Practical##############
+>>> a=2
+>>> type(a)
+<class 'int'>
+>>> simple = 3
+>>> type(simple)
+<class 'int'>
+>>> a2=3
+>>> type(a2)
+<class 'int'>
+>>> b=2.3
+>>> type(b)
+<class 'float'>
+>>> c=True
+>>> type(c)
+<class 'bool'>
+>>> c=true
+Traceback (most recent call last):
+  File "<pyshell#10>", line 1, in <module>
+    c=true
+NameError: name 'true' is not defined
+>>> c='true'
+>>> type(c)
+<class 'str'>
+>>> c='True'
+>>> type(c)
+<class 'str'>
+>>> c=False
+>>> d="a"
+>>> type(d)
+<class 'str'>
+>>> d="""a"""
+>>> type(d)
+<class 'str'>
+>>> d='''amit'''
+>>> type(d)
+<class 'str'>
+>>> d='10'
+>>> type(d)
+<class 'str'>
+>>> e=2+4j
+>>> type(e)
+<class 'complex'>
+>>> e=4j
+>>> type(e)
+<class 'complex'>
+>>> e=2
+>>> type(e)
+<class 'int'>
+>>> e=2+4j
+>>> e.real
+2.0
+>>> e.imag
+4.0
+>>> 
+
+- We can use type() to check datatype
+##########################################
+
+Notes: 
+
+Type casting:
+It is the mechanism to change one type to other. 
+int-> float
+float-> int
+
+We use following functions for type casting
+1. int()
+2. float()
+3. str()
+4. complex()
+5. bool()
+6. list()
+7. tuple()
+8. dict()
+9. set()
+
+
+1. int()
+-We can convert from any type to int except complex
+-If we want to convert str type to int then compulsory str should contain integral string like ("10")
+
+2. float()
+- We can convert ant type to float except complex
+- To convert str into float compulsory str should be either integral("10") or float("10.3")
+
+3. bool()
+-  we can convert any type to bool 
+- if it is zero, empty string, None then the result is false other wise result is true
+
+4. str()
+- Everything can be converted into str
+
+5. complex()
+- str can not be converted to complex.
+
+
+#######Practical##############
+
+>>> complex("1",2)
+Traceback (most recent call last):
+  File "<pyshell#39>", line 1, in <module>
+    complex("1",2)
+TypeError: complex() can't take second arg if first is a string
+>>> complex(2,"1")
+Traceback (most recent call last):
+  File "<pyshell#40>", line 1, in <module>
+    complex(2,"1")
+TypeError: complex() second arg can't be a string
+>>> a=2.3
+>>> int(a)
+2
+>>> int(2.222)
+2
+>>> int("10")
+10
+>>> int("ITVEDANT")
+Traceback (most recent call last):
+  File "<pyshell#4>", line 1, in <module>
+    int("ITVEDANT")
+ValueError: invalid literal for int() with base 10: 'ITVEDANT'
+>>> int("10.5")
+Traceback (most recent call last):
+  File "<pyshell#5>", line 1, in <module>
+    int("10.5")
+ValueError: invalid literal for int() with base 10: '10.5'
+>>> int("True")
+Traceback (most recent call last):
+  File "<pyshell#6>", line 1, in <module>
+    int("True")
+ValueError: invalid literal for int() with base 10: 'True'
+>>> int(True)
+1
+>>> int(False)
+0
+>>> int('False')
+Traceback (most recent call last):
+  File "<pyshell#9>", line 1, in <module>
+    int('False')
+ValueError: invalid literal for int() with base 10: 'False'
+>>> int(2+5j)
+Traceback (most recent call last):
+  File "<pyshell#10>", line 1, in <module>
+    int(2+5j)
+TypeError: can't convert complex to int
+>>> float(2)
+2.0
+>>> float("10")
+10.0
+>>> float("10.5")
+10.5
+>>> float("ITVEDANT")
+Traceback (most recent call last):
+  File "<pyshell#15>", line 1, in <module>
+    float("ITVEDANT")
+ValueError: could not convert string to float: 'ITVEDANT'
+>>> float(3+4j)
+Traceback (most recent call last):
+  File "<pyshell#16>", line 1, in <module>
+    float(3+4j)
+TypeError: can't convert complex to float
+>>> float(True)
+1.0
+>>> float(False)
+0.0
+>>> bool(1)
+True
+>>> bool(0)
+False
+>>> bool(None)
+False
+>>> bool("")
+False
+>>> bool(" ")
+True
+>>> bool(1.1)
+True
+>>> bool(3+2j)
+True
+>>> str(1)
+'1'
+>>> str("1.1")
+'1.1'
+>>> str(2+4j)
+'(2+4j)'
+>>> str(True)
+'True'
+>>> complex(1)
+(1+0j)
+>>> complex(4j)
+4j
+>>> complex(1.1)
+(1.1+0j)
+>>> complex(True)
+(1+0j)
+>>> complex(2,4)
+(2+4j)
+>>> complex("ITVEDANT")
+Traceback (most recent call last):
+  File "<pyshell#35>", line 1, in <module>
+    complex("ITVEDANT")
+ValueError: complex() arg is a malformed string
+>>> 
+
+
+
+Escape characters in python
+1. \n
+2. \t
+3. \v
+4. \b
+5. \'
+6. \"
+7. \\
+
+
+
+
+
+
+
+
+
+
