@@ -1,0 +1,29 @@
+import time
+import gc
+
+#by default gc is activated internally
+"""
+print(gc.isenabled())
+gc.disable()
+print(gc.isenabled())
+gc.enable()
+print(gc.isenabled())
+"""
+
+
+class Test:
+    def __init__(self):  #constructor
+        print("This is constructor used to initialize object")
+    def __del__(self):   #distructor performs cleanup activities.
+        print("I am performing cleanup activities")
+
+
+#t=Test()
+#t=None
+list=[Test(),Test(),Test(),Test()]
+
+#time.sleep(10)
+print("Lets delete objects")
+
+del list
+#time.sleep(10)
