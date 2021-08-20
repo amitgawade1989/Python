@@ -1,0 +1,241 @@
+#Regular expression
+#used to format string
+# we are going to use re module.
+#1.compile()
+#pattern=re.compile("ab") #here this pattern will be regular expression object.
+
+#2. finditer()
+#matcher=pattern.finditer("abbaabbaaabab")
+#start()   return start index of match
+#end()   returns end+1 index
+#group()  returns matching string
+"""
+import re
+pattern=re.compile("ab")
+matcher=pattern.finditer("abbabababaaab")
+for match in matcher:
+    print(match.start(),"--",match.end(),"--",match.group())
+
+
+import re
+matcher=re.finditer("ab","abbabababaaab")
+for match in matcher:
+    print(match.start(),"--",match.end(),"--",match.group())
+"""
+
+#charachter clasess in RE
+"""
+1.[abc]    either a or b or c
+2.[^abc] except a and b and c
+3.[a-z]  any lower case we are going to search
+4.[A-Z]  any upper case
+
+import re
+matcher=re.finditer("[a-zA-Z0-9]","a7b@Xk9zZZ")
+for match in matcher:
+    print(match.start(),"--",match.end(),"--",match.group())
+
+#5 [a-zA-Z] any alphabet.
+#6 [0-9]  any digit from 0 to 9
+#7 [a-zA-Z0-9]  any alphbet ant digit
+#8 [^a-zA-Z0-90] exlude alphabets and digits
+"""
+#predefinded character clasess
+"""
+\s  space character
+\S exclude space character
+\d any digit
+\D any character except digit.
+\w any word character.
+\W only for special symbols.
+.  any character including special characters.
+
+
+import re
+matcher=re.finditer(".","a7b@k9z!")
+for match in matcher:
+    print(match.start(),"--",match.end(),"--",match.group())   
+
+"""
+
+#Quantifiers:
+#a   Exactly one a
+#a+  Atleast one a
+#a*  any number of "a" including zero.
+#a?  atmost one "a" i.e either zero number or 1 number.
+# a{m} Exactly m number of a's
+# a{m,n}  min number of a's and maximum number of a's
+
+"""
+import re
+matcher=re.finditer("a{2,5}","ababaabbaaa")
+for match in matcher:
+    print(match.start(),"----", match.group())
+
+import re
+matcher=re.finditer("a+","ababaabbaaa")
+for match in matcher:
+    print(match.start(),"----", match.group())
+
+import re
+matcher=re.finditer("a*","ababaabbaaa")
+for match in matcher:
+    print(match.start(),"----", match.group())
+
+
+import re
+matcher=re.finditer("a?","ababaabbaaa")
+for match in matcher:
+    print(match.start(),"----", match.group())
+
+
+import re
+matcher=re.finditer("a{2}","ababaabbaaa")
+for match in matcher:
+    print(match.start(),"----", match.group())
+
+
+import re
+matcher=re.finditer("a{1,4}","ababaabbaaaa")
+for match in matcher:
+    print(match.start(),"----", match.group())
+
+#Diff Functions of re module.
+#1. match()
+
+#We can use match() to check the given pattern at begining of target string.
+#If match is there it will return match object otherwise it will return None
+import re
+
+s=input("Enter pattern")
+m=re.match(s,"aaaaabcabdefg")
+
+if m!=None:
+    print("Match is available at",m.start(),"and",m.end())
+else:
+    print("No match found")
+
+
+
+#2. fullmatch()
+#TO match the pattern to all the target string i.e complete string it will scan.
+#if complete string matches then it will give match object otherwise none will be there.
+import re
+
+s=input("Enter pattern")
+m=re.fullmatch(s,"aaaaabcabdefg")
+
+if m!=None:
+    print("Match is available at",m.start(),"and",m.end())
+else:
+    print("No match found")
+
+
+
+#search()
+#We can use search function to search the given pattern in target string
+#if match is there it will return match object otherwise none.
+
+import re
+
+s=input("Enter pattern")
+m=re.search(s,"aaaaabcabdefg")
+
+if m!=None:
+    print("Match is available at",m.start(),"and",m.end())
+else:
+    print("No match found")
+
+
+#finditer()
+
+#findall()
+
+#To find all occurances of Match
+#This returns list of all occurances.
+
+import re
+l=re.findall("[a-z]","a7a8c9v8")
+print(l)
+"""
+
+
+#sub()
+#it means substitution or replacement.
+#re.sub(regx,replacementstring, targetstring)
+# In the target string every matched pattern will be replaced with provided replacement.
+
+"""
+import re
+a=re.sub("[a-z]","#","a7b9c5k8z")
+print(a)
+##7#9#5#8#
+
+
+
+
+#subn()
+#It is exactly same as sub()   except it can also returns number of replacements
+
+import re
+a=re.subn("[a-z]","#","a7b9c5k8z")
+print(type(a))
+print(a)
+print(a[0])
+print(a[1])
+
+#split()
+
+#If we want to split the string according to perticular pattern then we use split() of re.
+
+#this fun will return list of all tokens
+
+import re
+l=re.split(",","This,is,regular,expression lecture")
+print(l)
+
+import re
+l=re.split(" ","this is not so good product")
+print(l)
+
+
+
+import re
+l=re.split("\.","www.google.com")
+print(l)
+
+#^ symbol
+
+#We can use this to check target string  strats with  provided pattern or not??
+#if it is not starting with pattern then it will return None
+import re
+res=re.search("^abc","Learning python is very easy") #it will give None
+print(res)
+
+import re
+res=re.search("^Learn","Learning python is very easy") #it will give match object.
+print(res)
+
+"""
+
+#$ Symbol
+
+#to check whether the given target string ends with given pattern or not
+
+import re
+res=re.search("Learn$","Learning python is very easy") #it will give none object.
+print(res)
+
+import re
+res=re.search("easy$","Learning python is very easy") #it will give match object.
+print(res)
+
+res=re.search("Easy$","Learning python is very easy",re.IGNORECASE) #it will give match object.
+print(res)
+
+"""
+
+#findall()
+
+#To find all occurances of Match
+#This returns list of all occurances.
