@@ -1,0 +1,263 @@
+"""
+SQL
+1. DDL - Data Defination lang.
+THis deals with str tables.
+1.create     
+2. delete/drop
+3. modify
+4. details of tables.
+5. rename
+
+1. create
+2. alter (add,modify,drop)(add new col, modify datatype of col, drop col)
+3. drop
+4. rename
+5. desc
+6. trucate
+
+
+DML: Data manupulation lang.
+It deals with data
+1. insert
+2. delete
+3. update
+4. select.
+
+DCL - Data controls lang.
+1. revocke
+2. grant
+
+
+TCL:
+savepoint
+rollback
+commit
+
+
+
+
+
+
+
+
+
+
+#setup Connection
+import mysql.connector
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="yourusername",
+  password="yourpassword"
+)
+
+#create space where output get stores
+mycursor = mydb.cursor()
+
+#create databases
+mycursor.execute("CREATE DATABASE mydatabase")
+#show databses
+mycursor.execute("SHOW DATABASES")
+for x in mycursor:
+  print(x)
+
+
+#create table
+mycursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
+
+#show tables
+mycursor.execute("SHOW TABLES")
+for x in mycursor:
+  print(x)
+
+
+#Example
+import mysql.connector
+conn=mysql.connector.connect(
+    user="root",
+    password="",
+    host="localhost",
+    database = "Demo")
+
+cursor=conn.cursor()
+#Create table
+#q=cursor.execute("CREATE table emplo(id INTEGER, name CHARACTER)")
+#print("table created ")
+#insert value
+cursor.execute("INSERT INTO emplo (ID,NAME) VALUES (1, 'Paul')");
+#insert using other way.......
+sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
+val = ("John", "Highway 21")
+cursor.execute(sql, val)
+conn.commit()
+conn.close()
+
+
+#insert multiple values
+
+sql = "INSERT INTO emplo (id,name) VALUES (%s, %s)"
+val = [
+  ('Peter', 'Lowstreet 4'),
+  ('Amy', 'Apple st 652'),
+  ('Hannah', 'Mountain 21'),
+  ('Michael', 'Valley 345'),
+  ('Sandy', 'Ocean blvd 2'),
+  ('Betty', 'Green Grass 1'),
+  ('Richard', 'Sky st 331'),
+  ('Susan', 'One way 98'),
+  ('Vicky', 'Yellow Garden 2'),
+  ('Ben', 'Park Lane 38'),
+  ('William', 'Central st 954'),
+  ('Chuck', 'Main Road 989'),
+  ('Viola', 'Sideway 1633')
+]
+
+mycursor.executemany(sql, val)
+
+mydb.commit()#ssave changes 
+
+print(mycursor.rowcount, "was inserted.")
+
+
+#display
+import mysql.connector
+conn=mysql.connector.connect(
+    user="root",
+    password="",
+    host="localhost",
+    database = "Demo")
+
+cursor=conn.cursor()
+cursor.execute("SELECT * FROM emplo")  #selecting all
+
+myresult = cursor.fetchall()
+
+for x in myresult:
+  print(x)
+
+myresult = cursor.fetchone() #only one row
+print(myresult)
+
+
+cursor.execute("SELECT id, name FROM emplo") #Selecting columns
+
+myresult = cursor.fetchall()
+
+for x in myresult:
+  print(x)
+
+
+
+
+#apply filter
+cursor = mydb.cursor()
+
+sql = "SELECT * FROM emplo WHERE name ='ITVEDANT'"
+
+cursor.execute(sql)
+
+myresult = cursor.fetchall()
+
+for x in myresult:
+  print(x)
+
+
+"""
+
+
+
+
+
+
+
+import mysql.connector
+conn=mysql.connector.connect(
+    user="root",
+    password="",
+    host="localhost",
+    database = "mydatabase" )
+print("Connected")
+
+mycursor = conn.cursor()
+
+#mycursor.execute("CREATE DATABASE mydatabase")
+#print("Database created")
+
+#mycursor.execute("SHOW DATABASES")
+#for x in mycursor:
+#  print(x)
+
+#mycursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
+
+#mycursor.execute("SHOW TABLES")
+#for x in mycursor:
+#  print(x)
+#mycursor.execute("CREATE TABLE emp (name VARCHAR(255), address VARCHAR(255))")
+#mycursor.execute("INSERT INTO customers (name,address) VALUES ('Paul','Mumbai')");
+#conn.commit()
+
+#sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
+#val = ("John", "Highway 21")
+
+#mycursor.execute(sql, val)
+"""
+sql = "INSERT INTO customers (name,address) VALUES (%s, %s)"
+val = [
+  ('Peter', 'Lowstreet 4'),
+  ('Amy', 'Apple st 652'),
+  ('Hannah', 'Mountain 21'),
+  ('Michael', 'Valley 345'),
+  ('Sandy', 'Ocean blvd 2'),
+  ('Betty', 'Green Grass 1'),
+  ('Richard', 'Sky st 331'),
+  ('Susan', 'One way 98'),
+  ('Vicky', 'Yellow Garden 2'),
+  ('Ben', 'Park Lane 38'),
+  ('William', 'Central st 954'),
+  ('Chuck', 'Main Road 989'),
+  ('Viola', 'Sideway 1633')]
+mycursor.executemany(sql, val)
+conn.commit()
+
+#mycursor.execute("SELECT * FROM customers where name='Ben'") 
+
+#myresult = mycursor.fetchall()
+#print(myresult)
+#myresult = mycursor.fetchone()
+
+#for x in myresult:
+#  print(x)
+
+#mycursor.execute("delete from customers where name = 'William'")
+#mycursor.execute("SELECT * FROM customers where name='William'") 
+#myresult = mycursor.fetchall()
+#print(myresult)
+mycursor.execute("delete from customers")
+
+mycursor.execute("SELECT * FROM customers") 
+
+myresult = mycursor.fetchall()
+for x in myresult:
+  print(x)
+conn.commit()
+
+sql = "INSERT INTO customers (name,address) VALUES (%s, %s)"
+val = [
+  ('Peter', 'Lowstreet 4'),
+  ('Amy', 'Apple st 652'),
+  ('Hannah', 'Mountain 21'),
+  ('Michael', 'Valley 345'),
+  ('Sandy', 'Ocean blvd 2'),
+  ('Betty', 'Green Grass 1'),
+  ('Richard', 'Sky st 331'),
+  ('Susan', 'One way 98'),
+  ('Vicky', 'Yellow Garden 2'),
+  ('Ben', 'Park Lane 38'),
+  ('William', 'Central st 954'),
+  ('Chuck', 'Main Road 989'),
+  ('Viola', 'Sideway 1633')]
+mycursor.executemany(sql, val)
+conn.commit()
+"""
+mycursor.execute("update customers set name = 'ITVEDANT'")
+conn.commit()
