@@ -1,2 +1,2 @@
 # Python
-This is Practice repository for python
+Python running notes
