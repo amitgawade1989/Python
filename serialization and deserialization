@@ -1,0 +1,98 @@
+"""
+https://www.knowledgehut.com/tutorials/python-tutorial/python-object-serialization
+
+Object serialization is the process of converting state of an object into byte
+stream. This byte stream can further be stored in any file-like object such as a disk
+file 
+
+Python refers to serialization and deserialization by terms pickling and unpickling respectively.
+The 'pickle' module bundled with Python’s standard library
+defines functions for serialization (dump() and dumps()) and deserialization (load() and loads()).
+
+The data format of pickle module is very Python specific. Hence, programs not written in
+Python may not be able to deserialize the encoded (pickled) data properly.
+In fact it is not considered to be secure to unpickle data from unauthenticated source.
+"""
+
+"""The dump() and load() functions of pickle module respectively perform pickling and unpickling of
+Python data. The dump() function writes pickled object to a file (or file like object)
+and load() function unpickles data from file back to Python object.
+
+import pickle
+#serialization
+f=open("pqr.txt","wb")
+dct={"name":"ITVEDANT", "age":23, "Gender":"Male","marks":75}
+pickle.dump(dct,f)
+f.close()
+
+
+#deseiralization
+f=open("pqr.txt","rb")
+d=pickle.load(f)
+print (d)
+f.close()
+
+
+"""Note that the dictionary object doesn't retain order of insertion of keys. Hence the k-v pairs in
+retrieved dictionary may not be in original order.
+
+
+The pickle module also consists of dumps() function that pickles Python data to a string representation.
+
+>>> from pickle import dump
+>>> dct={"name":"ITVEDANT", "age":23, "Gender":"Male","marks":75}
+>>> dctstring=dumps(dct)
+>>> dctstring
+
+
+Use loads() function to unpickle the string and obtain original dictionary object.
+>>> from pickle import load
+>>> dct=loads(dctstring)
+>>> dct
+{'name': 'ITVEDANT', 'age': 23, 'Gender': 'Male', 'marks': 75}
+
+
+Python standard data types are picklable, similarly, objects of custom
+class can also be pickled and unpickled.
+"""
+
+
+
+"""
+from pickle import *
+class student:
+    def __init__(self):
+            self.name="XYZ"
+            self.age=22
+    def show(self):
+            print ("name:", self.name, "age:", self.age)
+
+
+p1=student()
+f=open("pickled.txt","wb")
+dump(p1,f)
+f.close()
+print ("unpickled data")
+f=open("pickled.txt","rb")
+p1=load(f)
+p1.show()
+"""
+
+
+from pickle import *
+class student:
+    def __init__(self):
+            self.name="XYZ"
+            self.age=22
+    def show(self):
+            print ("name:", self.name, "age:", self.age)
+
+
+p1=student()
+f=open("pickled.txt","wb")
+dump(p1,f)
+f.close()
+print ("unpickled data")
+f=open("pickled.txt","rb")
+p1=load(f)
+p1.show()
