@@ -19,10 +19,12 @@ class Test:
 
 
 #t=Test()
+#del t
 #t=None
 list=[Test(),Test(),Test(),Test()]
 
-#time.sleep(10)
+time.sleep(10)
+
 print("Lets delete objects")
 
 del list
