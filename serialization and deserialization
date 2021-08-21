@@ -9,6 +9,7 @@ Python refers to serialization and deserialization by terms pickling and unpickl
 The 'pickle' module bundled with Python’s standard library
 defines functions for serialization (dump() and dumps()) and deserialization (load() and loads()).
 
+
 The data format of pickle module is very Python specific. Hence, programs not written in
 Python may not be able to deserialize the encoded (pickled) data properly.
 In fact it is not considered to be secure to unpickle data from unauthenticated source.
@@ -39,16 +40,17 @@ retrieved dictionary may not be in original order.
 
 The pickle module also consists of dumps() function that pickles Python data to a string representation.
 
->>> from pickle import dump
->>> dct={"name":"ITVEDANT", "age":23, "Gender":"Male","marks":75}
->>> dctstring=dumps(dct)
->>> dctstring
+from pickle import dumps
+dct={"name":"ITVEDANT", "age":23, "Gender":"Male","marks":75}
+dctstring=dumps(dct)
+print(dctstring)
+print(type(dctstring))
 
 
 Use loads() function to unpickle the string and obtain original dictionary object.
->>> from pickle import load
->>> dct=loads(dctstring)
->>> dct
+from pickle import loads
+dct=loads(dctstring)
+print(dct)
 {'name': 'ITVEDANT', 'age': 23, 'Gender': 'Male', 'marks': 75}
 
 
