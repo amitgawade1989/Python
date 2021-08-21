@@ -13,6 +13,7 @@
 import re
 pattern=re.compile("ab")
 matcher=pattern.finditer("abbabababaaab")
+
 for match in matcher:
     print(match.start(),"--",match.end(),"--",match.group())
 
@@ -31,14 +32,18 @@ for match in matcher:
 4.[A-Z]  any upper case
 
 import re
-matcher=re.finditer("[a-zA-Z0-9]","a7b@Xk9zZZ")
+matcher=re.finditer("[^@]","a7b@Xk9zZZ")
 for match in matcher:
     print(match.start(),"--",match.end(),"--",match.group())
+    
+print("a=",ca)
+print("b=",cb)
+print("c=",cc)
 
 #5 [a-zA-Z] any alphabet.
 #6 [0-9]  any digit from 0 to 9
 #7 [a-zA-Z0-9]  any alphbet ant digit
-#8 [^a-zA-Z0-90] exlude alphabets and digits
+#8 [^a-zA-Z0-9] exlude alphabets and digits
 """
 #predefinded character clasess
 """
@@ -46,13 +51,13 @@ for match in matcher:
 \S exclude space character
 \d any digit
 \D any character except digit.
-\w any word character.
-\W only for special symbols.
-.  any character including special characters.
+\w any word character including numbers.
+\W only for special symbols spaces.
+.  all.
 
 
 import re
-matcher=re.finditer(".","a7b@k9z!")
+matcher=re.finditer("\s","a 7b @k 9z!")
 for match in matcher:
     print(match.start(),"--",match.end(),"--",match.group())   
 
