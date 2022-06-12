@@ -1,6 +1,6 @@
 #Python Programming: 
 Notes: 
-
+Alpha/numbers(A(a) to Z(z) Numbers !@#$ --> words(tokens) --> instruction --> program
 Tokens:   (Words in normal lang)
 
 1. Identifiers
