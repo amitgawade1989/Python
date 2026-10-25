@@ -1,0 +1,715 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Document Comparison Evaluation Pipeline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky phase index on the left, one long technical guide on the right; phases are true sequence so they carry numbers. */
+:root{
+  --bg:#f4f6f3; --surface:#ffffff; --ink:#17201d; --ink2:#47524d; --muted:#76817b; --line:#d8ddd6;
+  --code:#edf1ec; --accent:#0e6b5a; --accent-bg:#e0efe9;
+  --llm:#9a4a12; --llm-bg:#f8e9dc; --local:#5442ad; --local-bg:#ebe8f8; --det:#0e6b5a; --det-bg:#e0efe9;
+  --warn:#8a5a00; --warn-bg:#fbf1d9;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101513; --surface:#171f1c; --ink:#e7ece9; --ink2:#b2bcb7; --muted:#88938d; --line:#2b3531;
+  --code:#1c2522; --accent:#5cc4ab; --accent-bg:#183129;
+  --llm:#eb9a5c; --llm-bg:#3a2617; --local:#ada2f3; --local-bg:#272340; --det:#5cc4ab; --det-bg:#183129;
+  --warn:#e8bf62; --warn-bg:#352a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101513; --surface:#171f1c; --ink:#e7ece9; --ink2:#b2bcb7; --muted:#88938d; --line:#2b3531;
+  --code:#1c2522; --accent:#5cc4ab; --accent-bg:#183129;
+  --llm:#eb9a5c; --llm-bg:#3a2617; --local:#ada2f3; --local-bg:#272340; --det:#5cc4ab; --det-bg:#183129;
+  --warn:#e8bf62; --warn-bg:#352a12; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-block:32px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;grid-template-columns:220px minmax(0,1fr);gap:40px}
+header.top{grid-column:1/-1;display:grid;gap:10px;border-bottom:1px solid var(--line);padding-bottom:24px}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 40px/1.1 var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.lede{max-width:72ch;color:var(--ink2);font-size:17px;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;font-size:14px;max-height:calc(100vh - 32px);overflow:auto}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+nav.toc a{display:block;padding:5px 10px;border-radius:6px;color:var(--ink2);text-decoration:none}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--surface);color:var(--ink);outline:none}
+nav.toc .grp{font:600 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+main{min-width:0;display:grid;gap:56px}
+section{display:grid;gap:16px;min-width:0;scroll-margin-top:16px}
+h2{font:700 28px/1.15 var(--display);margin:0;text-wrap:balance}
+h2 .num{color:var(--accent);margin-right:10px}
+h3{font:600 19px/1.3 var(--display);margin:8px 0 0}
+h4{font:600 15px/1.4 var(--body);margin:4px 0 0}
+p,li{max-width:78ch}
+p{margin:0}
+ul,ol.steps{margin:0;padding-left:22px;display:grid;gap:6px}
+a{color:var(--accent)}
+code,kbd{font:13px/1.5 var(--mono);background:var(--code);padding:1px 5px;border-radius:4px}
+pre{font:12.5px/1.55 var(--mono);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:0;overflow-x:auto;white-space:pre}
+pre code{background:none;padding:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:12px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.io{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.io dt{font-weight:600;color:var(--ink2)}
+.io dd{margin:0;min-width:0}
+.tag{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--body);padding:5px 9px;border-radius:999px;white-space:nowrap}
+.tag::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.t-llm{color:var(--llm);background:var(--llm-bg)}
+.t-local{color:var(--local);background:var(--local-bg)}
+.t-det{color:var(--det);background:var(--det-bg)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.note{border-left:3px solid var(--warn);background:var(--warn-bg);padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font:600 12px/1.3 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:none}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+td code{font-size:12px}
+figure{margin:0;display:grid;gap:10px}
+figcaption{color:var(--ink2);font-size:14px;max-width:85ch}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+svg.d{display:block;width:100%;height:auto;min-width:760px;color:var(--ink)}
+svg.d text{font-family:var(--body);fill:currentColor}
+svg.d .t{font-size:13px;font-weight:600}
+svg.d .s{font-size:11px;fill:var(--ink2)}
+svg.d .lab{font-size:11px;fill:var(--ink2)}
+svg.d .row{font-size:11px;font-weight:600;letter-spacing:.1em;fill:var(--muted)}
+svg.d .box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+svg.d .box.hl{stroke:var(--accent);stroke-width:2}
+svg.d .ln{fill:none;stroke:var(--ink2);stroke-width:1.5}
+svg.d .ln.dash{stroke-dasharray:5 4}
+svg.d .halo{fill:none;stroke:var(--surface);stroke-width:7}
+svg.d .bl{fill:var(--llm-bg)} svg.d .blt{fill:var(--llm);font-size:10.5px;font-weight:600}
+svg.d .bo{fill:var(--local-bg)} svg.d .bot{fill:var(--local);font-size:10.5px;font-weight:600}
+svg.d .bd{fill:var(--det-bg)} svg.d .bdt{fill:var(--det);font-size:10.5px;font-weight:600}
+svg.d .arrowhead{fill:var(--ink2)}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;font:700 24px/1.2 var(--display)}
+.kpi span{font-size:13px;color:var(--ink2)}
+.small{font-size:13px;color:var(--ink2)}
+@media (max-width:900px){
+  .wrap{grid-template-columns:minmax(0,1fr)}
+  nav.toc{position:static;max-height:none}
+  nav.toc ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid2,.grid3,.kpi{grid-template-columns:minmax(0,1fr)}
+  h1{font-size:32px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+html{scroll-behavior:smooth}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Technical guide · for the team</div>
+  <h1>Document Comparison Evaluation Pipeline</h1>
+  <p class="lede">How we measure an internal LLM's ability to compare two documents: how the documents are chunked, how a verified golden question set is built from them, how the parent-child RAG answers with traceable citations, and how every answer is scored against the LLM Evaluation Framework (Performance P1–P7, Reliability R1–R4, Document Comparison column).</p>
+  <div class="legend">
+    <span class="tag t-llm">Internal LLM call</span>
+    <span class="tag t-local">Local model (runs on the machine)</span>
+    <span class="tag t-det">Deterministic (code / formula, no model)</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <ol>
+    <li class="grp">Overview</li>
+    <li><a href="#overview">What it does</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#models">Models and roles</a></li>
+    <li class="grp">Build the test set</li>
+    <li><a href="#p0">0 · Ingest</a></li>
+    <li><a href="#p1">1 · Align</a></li>
+    <li><a href="#p2">2 · Golden set</a></li>
+    <li><a href="#p2b">2b · Reliability suite</a></li>
+    <li class="grp">Run and score</li>
+    <li><a href="#p3">3 · RAG answers</a></li>
+    <li><a href="#p4">4 · Performance</a></li>
+    <li><a href="#p4b">4b · Reliability</a></li>
+    <li><a href="#p5">5 · Report</a></li>
+    <li class="grp">Reference</li>
+    <li><a href="#evaluation">Evaluation methods</a></li>
+    <li><a href="#operations">Running and recovery</a></li>
+    <li><a href="#limits">Known limits</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ============================================================ OVERVIEW -->
+<section id="overview">
+  <h2>What the pipeline does</h2>
+  <p>We give the system two documents of the same kind (in the sample: an HR handbook for the UK entity and one for the India entity). The pipeline then answers one question: <b>how well does the internal LLM compare these two documents?</b> To answer it objectively, the pipeline builds its own test from the documents, so every question has a known correct answer and a known location in both documents.</p>
+  <div class="grid3">
+    <div class="card"><h4>Questions always need both documents</h4><p class="small">Three types: <b>differential</b> (the documents differ), <b>equivalence</b> (they say the same thing), <b>asymmetric</b> (only one covers it). A question never names a document, region or page.</p></div>
+    <div class="card"><h4>Every answer is traceable</h4><p class="small">Ground truth and model answers both point to exact chunk IDs such as <code>D1-P04-C01</code> (document 1, section 4, chunk 1), so retrieval and citations are scored by ID, not by opinion.</p></div>
+    <div class="card"><h4>Scored against the framework</h4><p class="small">Each sub-metric uses the method the framework prescribes: deterministic formula, LLM judge, or hybrid. Results land in an Excel scorecard laid out like the framework sheet.</p></div>
+  </div>
+  <div class="kpi" aria-label="Sample run size">
+    <div><b>2</b><span>documents (UK and India HR handbooks)</span></div>
+    <div><b>10 + 10</b><span>sections, 19 + 19 chunks</span></div>
+    <div><b>81</b><span>accepted golden questions</span></div>
+    <div><b>458</b><span>reliability variants</span></div>
+  </div>
+</section>
+
+<!-- ============================================================ ARCHITECTURE -->
+<section id="architecture">
+  <h2>System architecture</h2>
+  <p>Nine scripts, one per phase. Each phase reads the previous phase's files from disk and writes its own, so any phase can be re-run on its own. The top row builds the test set once per document pair; the bottom row runs and scores one model under test and is repeated for every model we evaluate.</p>
+  <figure>
+    <div class="fig">
+    <svg class="d" viewBox="0 0 1160 560" role="img" aria-label="Pipeline architecture: two documents flow through ingest, alignment, golden set and reliability suite; the questions then go through the RAG system with one isolated vector store per document, and the answers are scored for performance and reliability before the report is produced.">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker></defs>
+      <text class="row" x="10" y="30">BUILD THE TEST SET · once per document pair</text>
+      <text class="row" x="10" y="452">RUN AND SCORE · once per model under test</text>
+
+      <!-- row A -->
+      <rect class="box" x="10" y="50" width="140" height="110" rx="10"/>
+      <text class="t" x="80" y="92" text-anchor="middle">Two documents</text>
+      <text class="s" x="80" y="112" text-anchor="middle">PDF · DOCX · TXT · MD</text>
+      <text class="s" x="80" y="128" text-anchor="middle">+ config.yaml</text>
+
+      <rect class="box" x="200" y="50" width="170" height="110" rx="10"/>
+      <text class="t" x="285" y="78" text-anchor="middle">Phase 0 · Ingest</text>
+      <text class="s" x="285" y="97" text-anchor="middle">headings → parent sections</text>
+      <text class="s" x="285" y="112" text-anchor="middle">splitter → child chunks</text>
+      <rect class="bd" x="240" y="126" width="90" height="20" rx="10"/><text class="bdt" x="285" y="140" text-anchor="middle">no model</text>
+
+      <rect class="box" x="430" y="50" width="170" height="110" rx="10"/>
+      <text class="t" x="515" y="78" text-anchor="middle">Phase 1 · Align</text>
+      <text class="s" x="515" y="97" text-anchor="middle">section ↔ section, facts,</text>
+      <text class="s" x="515" y="112" text-anchor="middle">SAME / DIFFERENT / …</text>
+      <rect class="bl" x="447" y="126" width="136" height="20" rx="10"/><text class="blt" x="515" y="140" text-anchor="middle">LLM: generator</text>
+
+      <rect class="box" x="660" y="50" width="170" height="110" rx="10"/>
+      <text class="t" x="745" y="78" text-anchor="middle">Phase 2 · Golden set</text>
+      <text class="s" x="745" y="97" text-anchor="middle">questions, answers, evidence</text>
+      <text class="s" x="745" y="112" text-anchor="middle">checked + critic-reviewed</text>
+      <rect class="bl" x="672" y="126" width="146" height="20" rx="10"/><text class="blt" x="745" y="140" text-anchor="middle">LLM: generator + judge</text>
+
+      <rect class="box" x="890" y="50" width="170" height="110" rx="10"/>
+      <text class="t" x="975" y="78" text-anchor="middle">Phase 2b · Reliability</text>
+      <text class="s" x="975" y="97" text-anchor="middle">paraphrase, typo, adversarial,</text>
+      <text class="s" x="975" y="112" text-anchor="middle">long context, format, …</text>
+      <rect class="bl" x="902" y="126" width="146" height="20" rx="10"/><text class="blt" x="975" y="140" text-anchor="middle">LLM: generator + judge</text>
+
+      <path class="ln" d="M150,105 H198" marker-end="url(#ah)"/><text class="lab" x="174" y="98" text-anchor="middle">files</text>
+      <path class="ln" d="M370,105 H428" marker-end="url(#ah)"/><text class="lab" x="399" y="98" text-anchor="middle">chunks</text>
+      <path class="ln" d="M600,105 H658" marker-end="url(#ah)"/><text class="lab" x="629" y="98" text-anchor="middle">fact pairs</text>
+      <path class="ln" d="M830,105 H888" marker-end="url(#ah)"/><text class="lab" x="859" y="98" text-anchor="middle">golden</text>
+
+      <!-- cross-row links -->
+      <path class="ln" d="M285,160 V232 H95 V318" marker-end="url(#ah)"/>
+      <text class="lab" x="190" y="226" text-anchor="middle">children embedded</text>
+      <path class="ln" d="M975,160 V262 H360 V318" marker-end="url(#ah)"/>
+      <text class="lab" x="900" y="256" text-anchor="end">458 variant questions</text>
+      <path class="halo" d="M745,240 V284"/>
+      <path class="ln" d="M745,160 V284 H300 V318" marker-end="url(#ah)"/>
+      <path class="ln dash" d="M575,284 V318" marker-end="url(#ah)"/>
+      <text class="lab" x="520" y="278" text-anchor="middle">81 golden questions</text>
+      <text class="lab" x="582" y="302">gold answers + evidence IDs</text>
+
+      <!-- row B -->
+      <rect class="box" x="10" y="320" width="170" height="110" rx="10"/>
+      <text class="t" x="95" y="346" text-anchor="middle">Vector stores</text>
+      <rect class="box" x="24" y="356" width="64" height="30" rx="6"/><text class="s" x="56" y="376" text-anchor="middle">D1</text>
+      <rect class="box" x="102" y="356" width="64" height="30" rx="6"/><text class="s" x="134" y="376" text-anchor="middle">D2</text>
+      <path class="ln dash" d="M95,352 V390"/>
+      <rect class="bo" x="40" y="398" width="110" height="20" rx="10"/><text class="bot" x="95" y="412" text-anchor="middle">MiniLM 384-d</text>
+
+      <rect class="box hl" x="230" y="320" width="190" height="110" rx="10"/>
+      <text class="t" x="325" y="348" text-anchor="middle">Phase 3 · RAG</text>
+      <text class="s" x="325" y="367" text-anchor="middle">search both stores, expand to</text>
+      <text class="s" x="325" y="382" text-anchor="middle">parents, answer with citations</text>
+      <rect class="bl" x="250" y="396" width="150" height="20" rx="10"/><text class="blt" x="325" y="410" text-anchor="middle">LLM: under test</text>
+
+      <rect class="box" x="480" y="320" width="190" height="110" rx="10"/>
+      <text class="t" x="575" y="348" text-anchor="middle">Phase 4 · Performance</text>
+      <text class="s" x="575" y="367" text-anchor="middle">P1–P7, retrieval, citations,</text>
+      <text class="s" x="575" y="382" text-anchor="middle">comparison checks</text>
+      <rect class="bl" x="496" y="396" width="76" height="20" rx="10"/><text class="blt" x="534" y="410" text-anchor="middle">LLM: judge</text>
+      <rect class="bo" x="578" y="396" width="76" height="20" rx="10"/><text class="bot" x="616" y="410" text-anchor="middle">NLI model</text>
+
+      <rect class="box" x="730" y="320" width="190" height="110" rx="10"/>
+      <text class="t" x="825" y="348" text-anchor="middle">Phase 4b · Reliability</text>
+      <text class="s" x="825" y="367" text-anchor="middle">R1–R4 scored against the</text>
+      <text class="s" x="825" y="382" text-anchor="middle">clean run of the same questions</text>
+      <rect class="bl" x="777" y="396" width="96" height="20" rx="10"/><text class="blt" x="825" y="410" text-anchor="middle">LLM: judge</text>
+
+      <rect class="box" x="980" y="320" width="160" height="110" rx="10"/>
+      <text class="t" x="1060" y="348" text-anchor="middle">Phase 5 · Report</text>
+      <text class="s" x="1060" y="367" text-anchor="middle">Excel scorecard</text>
+      <text class="s" x="1060" y="382" text-anchor="middle">+ HTML report</text>
+      <rect class="bd" x="1015" y="396" width="90" height="20" rx="10"/><text class="bdt" x="1060" y="410" text-anchor="middle">no model</text>
+
+      <path class="ln" d="M180,375 H228" marker-end="url(#ah)"/><text class="lab" x="204" y="368" text-anchor="middle">top-10</text>
+      <path class="ln" d="M420,375 H478" marker-end="url(#ah)"/><text class="lab" x="449" y="368" text-anchor="middle">answers</text>
+      <path class="ln" d="M670,375 H728" marker-end="url(#ah)"/><text class="lab" x="699" y="368" text-anchor="middle">clean acc.</text>
+      <path class="ln" d="M920,375 H978" marker-end="url(#ah)"/><text class="lab" x="949" y="368" text-anchor="middle">summaries</text>
+
+      <rect class="box" x="980" y="480" width="160" height="56" rx="10"/>
+      <text class="t" x="1060" y="503" text-anchor="middle">Framework workbook</text>
+      <text class="s" x="1060" y="521" text-anchor="middle">metric rows (.xlsx)</text>
+      <path class="ln" d="M1060,480 V432" marker-end="url(#ah)"/><text class="lab" x="1052" y="460" text-anchor="end">rows + applicability</text>
+
+      <text class="s" x="10" y="478">Every LLM step saves each result as soon as it finishes; a re-run resumes where it stopped.</text>
+      <text class="s" x="10" y="496">Model under test and judge are always different internal LLM endpoints (no self-grading).</text>
+    </svg>
+    </div>
+    <figcaption>Data moves left to right as files. The two document stores never share a collection, so retrieval for one handbook can never return the other's text. The dashed arrow shows that Phase 4 reads the golden answers and evidence IDs directly; it never sees how they were generated.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================================================ MODELS -->
+<section id="models">
+  <h2>Models and their roles</h2>
+  <p>All model names live in one block of <code>config.yaml</code> (<code>models:</code>). Swapping a model never needs a code change.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Role</th><th>Kind</th><th>Used in</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><b>Generator</b></td><td><span class="tag t-llm">Internal LLM</span></td><td>Phases 1, 2, 2b</td><td>Extracts facts, confirms section matches, pairs facts, writes and revises questions, builds variants.</td></tr>
+      <tr><td><b>Model under test</b></td><td><span class="tag t-llm">Internal LLM</span></td><td>Phase 3 only</td><td>Answers the questions from the retrieved context, with chunk-ID citations. This is the model being evaluated.</td></tr>
+      <tr><td><b>Judge</b></td><td><span class="tag t-llm">Internal LLM</span></td><td>Phases 2, 2b, 4, 4b</td><td>Critic for the golden set; scores the metrics the framework marks as LLM Judge or hybrid. Must differ from the model under test.</td></tr>
+      <tr><td><b>Embeddings</b> · <code>all-MiniLM-L6-v2</code></td><td><span class="tag t-local">Local, 384 dimensions</span></td><td>Phases 1, 2b, 3, 4, 4b</td><td>Child-chunk and query vectors for retrieval; candidate section matching; cosine pre-filters for hybrid metrics. No API call. Reads at most ~256 word pieces per text.</td></tr>
+      <tr><td><b>NLI classifier</b> · <code>cross-encoder/nli-deberta-v3-base</code></td><td><span class="tag t-local">Local</span></td><td>Phase 4</td><td>Labels a (premise, claim) pair as entailment / contradiction / neutral. Used for groundedness (P6) and contradiction pre-checks (P5).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============================================================ PHASE 0 -->
+<section id="p0">
+  <h2><span class="num">0</span>Ingest: documents into parent and child chunks</h2>
+  <div class="tags"><span class="tag t-det">No model</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase0_ingest.py</code></dd>
+    <dt>Reads</dt><dd>the documents listed in <code>config.yaml → documents</code></dd>
+    <dt>Writes</dt><dd><code>data/processed/&lt;doc&gt;/parents.jsonl</code>, <code>children.jsonl</code>, <code>elements.jsonl</code>, <code>structure_review.md</code>, plus <code>ingest_manifest.json</code></dd></dl>
+
+  <h3>Method</h3>
+  <ol class="steps">
+    <li><b>Layout-aware extraction (PDF).</b> PyMuPDF <code>page.get_text("dict")</code> returns every text span with its font size, bold flag and position. Plain-text extraction would lose this, and headings depend on it.</li>
+    <li><b>Tables.</b> <code>page.find_tables()</code> finds the grid; each cell's text is rebuilt from the full spans that start inside it (the grid alone clips overflowing text). Tables become markdown with whole rows kept together.</li>
+    <li><b>Header/footer removal.</b> A line in the top or bottom 12% of a page that repeats on at least half the pages is dropped. Digits are ignored when comparing, so "Page 2" and "Page 3" match.</li>
+    <li><b>Heading detection.</b> Body font size = the most common size weighted by text length. A line is a heading if it is at least 1 pt larger and has at most 20 words. Fallbacks: bold numbered lines ("1.", "2.3", "Section 4"); Word heading styles for DOCX; <code>#</code> for Markdown; numbering or ALL CAPS for plain text.</li>
+    <li><b>Section level, chosen automatically.</b> Parents start at the largest heading size that occurs at least twice, so a one-off document title is not mistaken for a section. Smaller headings stay inside their parent.</li>
+    <li><b>Parents.</b> One per section, up to 1,500 tokens; larger sections split into "(part N)", preferring sub-heading boundaries. No headings at all → fixed-size parts.</li>
+    <li><b>Children.</b> Each parent is split with LangChain's recursive splitter into ~120-token pieces with 20 tokens of overlap. A sub-heading starts a new child; tables split by groups of rows with the header row repeated; pieces under 25 tokens merge into a neighbour.</li>
+    <li><b>Stable IDs and checks.</b> IDs are deterministic (<code>D1-P04-C02</code>), each chunk stores a text hash, and the run fails if IDs repeat, a parent has no child, or less than 99% of the document's words land in some chunk.</li>
+  </ol>
+
+  <h3>Example (UK handbook)</h3>
+  <div class="grid2">
+    <pre>Detected: headings by font size (body 10 pt, sections 15 pt)
+Removed footer: "Meridian ... Employee Handbook (UK) v#.# — Internal", "Page #"
+
+D1-P04  3. Annual Leave &amp; Public Holidays   page 2   276 tokens
+  D1-P04-C01  text   "The holiday year runs from 1 January ...
+                      Full-time employees receive 25 days' annual
+                      leave plus the 8 bank holidays ..."
+  D1-P04-C02  table  | Leave Type | Entitlement | Notes |
+                     | Annual leave | 25 days + 8 bank holidays | ...
+  D1-P04-C03  table  (header repeated) | Paternity leave | 2 weeks | ...</pre>
+    <div class="card"><h4>Result for the sample</h4>
+      <p class="small">Each handbook: 10 parents (title page + 9 numbered sections), 19 children, 1 table, 100% word coverage. The 12 pt "Disciplinary stages" heading stayed inside section 6 as a sub-heading because only 15 pt headings repeat.</p>
+      <p class="small"><b>Review checkpoint:</b> read <code>structure_review.md</code> before Phase 1. If the sections are right there, everything downstream inherits correct structure.</p></div>
+  </div>
+</section>
+
+<!-- ============================================================ PHASE 1 -->
+<section id="p1">
+  <h2><span class="num">1</span>Align: matching sections and fact pairs</h2>
+  <div class="tags"><span class="tag t-llm">Internal LLM: generator</span><span class="tag t-local">MiniLM for candidates</span><span class="tag t-det">Quote verification</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase1_align.py</code></dd>
+    <dt>Reads</dt><dd>Phase 0 parents and children of both documents</dd>
+    <dt>Writes</dt><dd><code>data/processed/alignment/</code>: <code>facts.jsonl</code>, <code>topic_map.json</code>, <code>fact_pairs.jsonl</code>, <code>alignment_review.md</code>, plus every raw LLM response</dd></dl>
+  <p>Headings differ between documents ("Annual Leave &amp; Public Holidays" vs "Leave &amp; Holidays"), so sections are matched by meaning, not title. The phase produces <b>fact pairs</b>: one attribute, each document's value, and how they relate.</p>
+
+  <h3>Method: five steps</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Step</th><th>Method</th><th>Calls</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Fact inventory</b></td><td>For each section, the generator lists every comparable fact (attribute, value, chunk ID, verbatim quote of ≤30 words). Each quote is checked against the chunk text with a fuzzy match (≥0.85); if it is found in a different chunk of the same section, the chunk ID is repaired.</td><td class="n">1 per section</td></tr>
+      <tr><td><b>2. Section matching</b></td><td>MiniLM ranks the 3 most similar sections of the other document (cosine ≥0.45). The generator confirms which really overlap and marks each match <i>full</i> or <i>partial</i>. Unmatched sections of document B are checked the other way round.</td><td class="n">1 per section of A</td></tr>
+      <tr><td><b>3. Topics</b></td><td>Deterministic grouping of <b>primary</b> matches (all full matches, else the single best partial). Other partial overlaps are kept only as cross-references, so unrelated sections cannot chain into one giant topic.</td><td class="n">none</td></tr>
+      <tr><td><b>4. Fact pairing</b></td><td>Per topic, the generator groups facts that answer the same question and labels each group SAME, DIFFERENT, PARTIAL or ONE_SIDED. Code then fixes contradictions (e.g. ONE_SIDED with facts on both sides becomes PARTIAL) and adds any fact the LLM forgot as ONE_SIDED.</td><td class="n">1 per topic</td></tr>
+      <tr><td><b>5. Absence check</b></td><td>Every ONE_SIDED fact is searched in the <i>whole</i> other document (MiniLM top-4 chunks), and the generator decides whether it is really missing. If it is found, the pair is upgraded and flagged; if not, the absence is marked verified with the searched sections recorded.</td><td class="n">1 per one-sided fact</td></tr>
+    </tbody>
+  </table></div>
+  <p>Relations decide the question types used in Phase 2: <b>DIFFERENT → differential</b>, <b>SAME → equivalence</b>, <b>PARTIAL / ONE_SIDED → asymmetric</b>.</p>
+
+  <h3>Examples from the sample</h3>
+  <div class="grid2">
+    <pre>// Step 1 – one extracted fact
+{"fact_id": "D1-P04-F02",
+ "attribute": "Full-time annual leave entitlement",
+ "value": "25 days' annual leave",
+ "child_ids": ["D1-P04-C01"],
+ "quote": "Full-time employees receive 25 days' annual
+           leave plus the 8 bank holidays ...",
+ "quote_score": 1.0}
+
+// Step 2 – section match for D1-P05 "Pay, Pension &amp; Benefits"
+candidates: D2-P05 (0.67), D2-P04 (0.49), D2-P03 (0.48)
+matches:    D2-P05 full    ("Compensation, Statutory
+                           Contributions &amp; Benefits")
+            D2-P03 partial (shift allowances) → cross-reference only</pre>
+    <pre>// Step 4 – fact pair, DIFFERENT
+T04-02  annual or earned leave entitlement
+  UK    "25 days' annual leave"   [D1-P04-C01]
+  India "18 days per year"        [D2-P04-C02]
+
+// Step 5 – absence verified, ONE_SIDED
+T04-17  shared parental leave
+  UK    "Up to 50 weeks; per statutory scheme" [D1-P04-C03]
+  India not addressed – searched D2-P04, D2-P08
+
+// Step 5 – found elsewhere, upgraded to PARTIAL
+T03-06  lunch break pay status
+  UK    "unpaid"
+  India "One-hour lunch break; pay status not specified"</pre>
+  </div>
+  <p class="small">Sample result: 258 facts, all quotes found verbatim; 10 topics matched one-to-one; 108 pairs (36 DIFFERENT, 25 SAME, 26 PARTIAL, 21 ONE_SIDED). Pairs whose evidence could not be verified are flagged and excluded from Phase 2. <b>Review checkpoint:</b> <code>alignment_review.md</code>.</p>
+</section>
+
+<!-- ============================================================ PHASE 2 -->
+<section id="p2">
+  <h2><span class="num">2</span>Golden set: verified comparison questions</h2>
+  <div class="tags"><span class="tag t-llm">Internal LLM: generator (write, revise)</span><span class="tag t-llm">Internal LLM: judge (critic)</span><span class="tag t-det">Rule checks, evidence linking</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase2_golden.py</code></dd>
+    <dt>Reads</dt><dd>verified fact pairs and topic map from Phase 1; chunk texts from Phase 0</dd>
+    <dt>Writes</dt><dd><code>data/golden/golden.jsonl</code> (the golden dataset), <code>rejected.jsonl</code>, <code>golden_review.md</code>, <code>golden_manifest.json</code>; step results in <code>work/</code></dd></dl>
+
+  <figure>
+    <div class="fig">
+    <svg class="d" viewBox="0 0 900 260" role="img" aria-label="Phase 2 review loop: generated questions go through rule checks and the critic; accepted ones go to the golden set, rejected ones are rewritten and re-checked, at most two times, after which they go to the rejected file.">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker></defs>
+      <rect class="box" x="10" y="40" width="150" height="70" rx="10"/><text class="t" x="85" y="70" text-anchor="middle">Generate</text>
+      <rect class="bl" x="35" y="80" width="100" height="20" rx="10"/><text class="blt" x="85" y="94" text-anchor="middle">generator</text>
+      <rect class="box" x="220" y="40" width="150" height="70" rx="10"/><text class="t" x="295" y="70" text-anchor="middle">Check</text>
+      <rect class="bd" x="245" y="80" width="100" height="20" rx="10"/><text class="bdt" x="295" y="94" text-anchor="middle">rules, no model</text>
+      <rect class="box" x="430" y="40" width="150" height="70" rx="10"/><text class="t" x="505" y="70" text-anchor="middle">Critic</text>
+      <rect class="bl" x="465" y="80" width="80" height="20" rx="10"/><text class="blt" x="505" y="94" text-anchor="middle">judge</text>
+      <rect class="box hl" x="650" y="40" width="160" height="70" rx="10"/><text class="t" x="730" y="70" text-anchor="middle">Accepted</text><text class="s" x="730" y="90" text-anchor="middle">golden.jsonl</text>
+      <rect class="box" x="325" y="170" width="150" height="70" rx="10"/><text class="t" x="400" y="200" text-anchor="middle">Revise</text>
+      <rect class="bl" x="350" y="210" width="100" height="20" rx="10"/><text class="blt" x="400" y="224" text-anchor="middle">generator</text>
+      <rect class="box" x="650" y="170" width="160" height="70" rx="10"/><text class="t" x="730" y="200" text-anchor="middle">Rejected</text><text class="s" x="730" y="220" text-anchor="middle">rejected.jsonl</text>
+
+      <path class="ln" d="M160,75 H218" marker-end="url(#ah2)"/><text class="lab" x="189" y="66" text-anchor="middle">candidates</text>
+      <path class="ln" d="M370,75 H428" marker-end="url(#ah2)"/><text class="lab" x="399" y="66" text-anchor="middle">passed</text>
+      <path class="ln" d="M580,75 H648" marker-end="url(#ah2)"/><text class="lab" x="614" y="66" text-anchor="middle">all pass</text>
+      <path class="ln" d="M330,110 V140 H370 V168" marker-end="url(#ah2)"/><text class="lab" x="336" y="134">rule issues</text>
+      <path class="ln" d="M505,110 V140 H440 V168" marker-end="url(#ah2)"/><text class="lab" x="510" y="134">critic issues</text>
+      <path class="ln" d="M325,205 H260 V112" marker-end="url(#ah2)"/><text class="lab" x="200" y="200">rewritten,</text><text class="lab" x="200" y="214">next round</text>
+      <path class="ln dash" d="M475,205 H648" marker-end="url(#ah2)"/><text class="lab" x="560" y="198" text-anchor="middle">still failing after 2 rewrites</text>
+    </svg>
+    </div>
+    <figcaption>One review round = rule checks + critic on every pending question, then rewriting of the failures. With <code>max_revisions: 2</code> there are at most three rounds. Questions that fail the rules skip the critic, which saves judge calls.</figcaption>
+  </figure>
+
+  <h3>Method</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Step</th><th>How it works</th></tr></thead>
+    <tbody>
+      <tr><td><b>Generate</b><br><span class="tag t-llm">generator</span></td><td>One call per topic (8 questions) using that topic's verified pairs, with a target mix of differential / equivalence / asymmetric and reasoning styles (multi-hop, conditional scenario, numeric, at most 2 "direct"). Plus 4 cross-topic calls of 2 questions, each given exactly two topics and required to use both. The prompt forbids naming either document.</td></tr>
+      <tr><td><b>Evidence linking</b><br><span class="tag t-det">code</span></td><td>Each question lists the <code>pair_ids</code> it relies on. Code, not the LLM, turns those into evidence: document, parent ID, child ID and the quote that matches each chunk. For one-sided pairs it records the absent side and the sections searched.</td></tr>
+      <tr><td><b>Check</b><br><span class="tag t-det">rules</span></td><td>Metadata lint (no "Region 1", "R1", "Document A", "first handbook", page/section numbers, chunk IDs, file names or configured place names); type must fit the pair relations; both documents covered; every quote found in its chunk; cross-topic questions really use two topics; required fields present.</td></tr>
+      <tr><td><b>Critic</b><br><span class="tag t-llm">judge</span></td><td>Sees only the question, ground truth and evidence text. Scores answerable, correct and unambiguous (1–5, all must be ≥4) and answers yes/no: needs both documents, type matches, leaks document identity, too trivial.</td></tr>
+      <tr><td><b>Revise</b><br><span class="tag t-llm">generator</span></td><td>Rewrites a rejected question using the exact issues found (for example <i>"question text reveals document identity: ['UK']"</i>), keeping its ID; the rewrite goes through check and critic again.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Example: one golden record</h3>
+  <pre>{"qid": "Q-T04-02",
+ "question": "In the two handbooks, how many days of annual or earned leave does a full-time
+              employee get each year, and which handbook gives more?",
+ "question_type": "differential",  "reasoning": "direct",  "difficulty": "easy",
+ "ground_truth": "UK Handbook: full-time employees receive 25 days' annual leave plus the 8 bank
+                  holidays ... India Handbook: earned / privilege leave is 18 days per year.
+                  The UK Handbook gives more annual or earned leave days by 7 days.",
+ "key_points": ["UK Handbook: 25 days' annual leave.",
+                "India Handbook: 18 days per year of earned / privilege leave.",
+                "The UK Handbook gives more by 7 days."],
+ "expected_values": [{"attribute": "annual or earned leave entitlement",
+                      "D1": ["25 days' annual leave"], "D2": ["18 days per year"]}],
+ "evidence": [{"doc_id": "D1", "parent_id": "D1-P04", "child_id": "D1-P04-C01",
+               "quote": "Full-time employees receive 25 days' annual leave plus the 8 bank holidays ..."},
+              {"doc_id": "D2", "parent_id": "D2-P04", "child_id": "D2-P04-C02",
+               "quote": "Earned / privilege leave | 18 days per year"}],
+ "absent": [],  "revision": 1,
+ "critic_scores": {"answerable": 5, "correct": 5, "unambiguous": 5}}</pre>
+  <p class="small">Rejected example: <code>Q-T01-01</code> asked which handbook's reference code ends in "UK". It failed the metadata lint in all three rounds and went to <code>rejected.jsonl</code>. Sample result: 88 candidates → 81 accepted (43 differential, 19 equivalence, 19 asymmetric), 21 of them after a rewrite.</p>
+</section>
+
+<!-- ============================================================ PHASE 2b -->
+<section id="p2b">
+  <h2><span class="num">2b</span>Reliability suite: variants of the golden questions</h2>
+  <div class="tags"><span class="tag t-llm">Internal LLM: generator (paraphrase, adversarial, R4)</span><span class="tag t-llm">Internal LLM: judge (answerability)</span><span class="tag t-det">Typos, repeats, instructions</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase2b_reliability_suite.py</code></dd>
+    <dt>Reads</dt><dd><code>golden.jsonl</code>, fact pairs</dd>
+    <dt>Writes</dt><dd><code>data/reliability/variants.jsonl</code>, <code>filler.json</code>, <code>suite_review.md</code></dd></dl>
+  <p>Each variant copies its parent question's ground truth and evidence, so it is scored exactly like the original. Sampling is stratified by question type and seeded, so the suite is reproducible.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Framework</th><th>Variant</th><th>How it is built</th><th>Example from the suite</th></tr></thead>
+    <tbody>
+      <tr><td>R1 Semantic</td><td>3 paraphrases × 30 questions</td><td><span class="tag t-llm">generator</span> rewrites; kept only if it passes the metadata lint and MiniLM similarity to the original ≥0.80</td><td>"For a policy question, what contact email and responsible role are specified by each handbook, and how are they different?"</td></tr>
+      <tr><td>R1 Repeatability</td><td>5 identical runs × 10 questions</td><td><span class="tag t-det">copy</span>; answered at temperature 0 with a fixed seed</td><td><code>Q-T09-08~rep1 … rep5</code></td></tr>
+      <tr><td>R2 Typo / noise</td><td>3 perturbations × 30 questions</td><td><span class="tag t-det">seeded code</span>: character typos on 10% of letters, casing changes on 30% of words, whitespace noise</td><td>"Whel u disaled employee asks what workplace support is availaable, what dks each andbook say …"</td></tr>
+      <tr><td>R2 Adversarial</td><td>3 techniques × 20 questions</td><td><span class="tag t-llm">generator</span>: false-premise question, leading question, and a false passage planted into one document's context</td><td>Planted into the UK block: "Full-time employees are entitled to 25 days of earned leave …" (the other handbook's number)</td></tr>
+      <tr><td>R2 Long context</td><td>4 lengths × 3 positions × 5 questions</td><td><span class="tag t-det">code</span>: gold sections buried in neutral filler (written once by the <span class="tag t-llm">generator</span>) at 1K / 10K / 50K / 100K tokens, at start / middle / end</td><td><code>Q-T02-01~lc_50000_middle</code></td></tr>
+      <tr><td>R3 Format</td><td>4 rules × 2 phrasings × 6 questions</td><td><span class="tag t-det">template</span>: word limit 60, exactly 3 bullets, comparison table, no markdown</td><td>"… Answer as exactly 3 bullet points and nothing else."</td></tr>
+      <tr><td>R3 Constraint</td><td>3 rules × 6 questions</td><td><span class="tag t-det">template</span>: no recommendation, no law names, stay on topic</td><td>"… Do not mention any law, act, regulation or code by name."</td></tr>
+      <tr><td>R3 Multi-step</td><td>2 phrasings × 10 questions</td><td><span class="tag t-det">template</span>: answer in three labelled parts: positions, relationship, implication</td><td>"Structure the answer in exactly three labelled parts: 'Part 1 - Positions:' …"</td></tr>
+      <tr><td>R4 Ambiguity</td><td>12 questions</td><td><span class="tag t-llm">generator</span> writes vague questions with their known interpretations</td><td>"How much leave do the two handbooks give?" (annual, sick or parental?)</td></tr>
+      <tr><td>R4 Insufficient evidence</td><td>12 questions</td><td><span class="tag t-llm">generator</span> proposes 24 off-topic HR questions; the <span class="tag t-llm">judge</span> reads both full documents and keeps only truly unanswerable ones</td><td>"Do the two handbooks offer tuition reimbursement …?" (12 of 24 candidates rejected as answerable)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============================================================ PHASE 3 -->
+<section id="p3">
+  <h2><span class="num">3</span>RAG answers: the model under test</h2>
+  <div class="tags"><span class="tag t-local">MiniLM retrieval</span><span class="tag t-llm">Internal LLM: under test</span><span class="tag t-det">Citation validation</span></div>
+  <dl class="io card"><dt>Commands</dt><dd><code>python scripts/run_phase3_rag.py --retrieval-only</code> (no LLM: retrieval metrics and quality gate)<br>
+      <code>python scripts/run_phase3_rag.py --run-id baseline</code><br>
+      <code>python scripts/run_phase3_rag.py --questions data/reliability/variants.jsonl --run-id reliability</code></dd>
+    <dt>Writes</dt><dd><code>outputs/runs/&lt;run_id&gt;/retrieval.jsonl</code> (saved before any LLM call), <code>generation.jsonl</code>, <code>manifest.json</code></dd></dl>
+
+  <figure>
+    <div class="fig">
+    <svg class="d" viewBox="0 0 1040 470" role="img" aria-label="One question through the RAG system: the question is embedded once, searched separately in each document's store, the top children are expanded to parent sections, the model under test answers from two labelled context blocks, and the citations are validated before saving.">
+      <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker></defs>
+      <rect class="box" x="10" y="115" width="140" height="70" rx="10"/><text class="t" x="80" y="144" text-anchor="middle">Question</text><text class="s" x="80" y="163" text-anchor="middle">names no document</text>
+      <rect class="box" x="190" y="115" width="150" height="70" rx="10"/><text class="t" x="265" y="140" text-anchor="middle">Embed once</text>
+      <rect class="bo" x="215" y="152" width="100" height="20" rx="10"/><text class="bot" x="265" y="166" text-anchor="middle">MiniLM 384-d</text>
+      <rect class="box" x="380" y="40" width="180" height="70" rx="10"/><text class="t" x="470" y="68" text-anchor="middle">Store D1 (UK)</text><text class="s" x="470" y="88" text-anchor="middle">top-10 children, ranked</text>
+      <rect class="box" x="380" y="190" width="180" height="70" rx="10"/><text class="t" x="470" y="218" text-anchor="middle">Store D2 (India)</text><text class="s" x="470" y="238" text-anchor="middle">top-10 children, ranked</text>
+      <path class="ln dash" d="M370,150 H570"/><text class="lab" x="470" y="143" text-anchor="middle">separate collections · never mixed</text>
+      <rect class="box" x="600" y="40" width="180" height="70" rx="10"/><text class="t" x="690" y="68" text-anchor="middle">Expand to parents</text><text class="s" x="690" y="88" text-anchor="middle">top-4 children → ≤3 sections</text>
+      <rect class="box" x="600" y="190" width="180" height="70" rx="10"/><text class="t" x="690" y="218" text-anchor="middle">Expand to parents</text><text class="s" x="690" y="238" text-anchor="middle">top-4 children → ≤3 sections</text>
+      <rect class="box hl" x="820" y="70" width="210" height="160" rx="10"/><text class="t" x="925" y="96" text-anchor="middle">Context</text>
+      <text class="s" x="835" y="120">=== DOCUMENT: UK Handbook ===</text><text class="s" x="835" y="137">[D1-P04-C01] The holiday year …</text><text class="s" x="835" y="154">[D1-P04-C02] | Leave Type | …</text>
+      <text class="s" x="835" y="180">=== DOCUMENT: India Handbook ===</text><text class="s" x="835" y="197">[D2-P04-C02] | Earned leave | 18 …</text>
+      <path class="ln" d="M150,150 H188" marker-end="url(#ah3)"/>
+      <path class="ln" d="M340,140 H360 V75 H378" marker-end="url(#ah3)"/>
+      <path class="ln" d="M340,160 H360 V225 H378" marker-end="url(#ah3)"/>
+      <path class="ln" d="M560,75 H598" marker-end="url(#ah3)"/>
+      <path class="ln" d="M560,225 H598" marker-end="url(#ah3)"/>
+      <path class="ln" d="M780,75 H818" marker-end="url(#ah3)"/><path class="ln" d="M780,225 H818" marker-end="url(#ah3)"/>
+      <text class="lab" x="565" y="128">→ retrieval.jsonl (ranks, IDs, scores)</text>
+
+      <rect class="box hl" x="820" y="320" width="210" height="80" rx="10"/><text class="t" x="925" y="350" text-anchor="middle">Internal LLM</text><text class="s" x="925" y="368" text-anchor="middle">model under test</text>
+      <rect class="bl" x="875" y="376" width="100" height="18" rx="9"/><text class="blt" x="925" y="389" text-anchor="middle">streamed: TTFT</text>
+      <rect class="box" x="560" y="320" width="210" height="80" rx="10"/><text class="t" x="665" y="348" text-anchor="middle">Answer JSON</text><text class="s" x="665" y="366" text-anchor="middle">relation · answer · claims</text><text class="s" x="665" y="382" text-anchor="middle">[citations] · not_found</text>
+      <rect class="box" x="300" y="320" width="210" height="80" rx="10"/><text class="t" x="405" y="348" text-anchor="middle">Citation check</text><text class="s" x="405" y="366" text-anchor="middle">ok · not_in_context · fabricated</text><text class="s" x="405" y="382" text-anchor="middle">→ parent + document</text>
+      <rect class="box" x="40" y="320" width="210" height="80" rx="10"/><text class="t" x="145" y="355" text-anchor="middle">generation.jsonl</text><text class="s" x="145" y="374" text-anchor="middle">+ latency, tokens</text>
+      <path class="ln" d="M925,230 V318" marker-end="url(#ah3)"/><text class="lab" x="933" y="280">answer only from context,</text><text class="lab" x="933" y="294">cite chunk IDs</text>
+      <path class="ln" d="M820,360 H772" marker-end="url(#ah3)"/>
+      <path class="ln" d="M560,360 H512" marker-end="url(#ah3)"/>
+      <path class="ln" d="M300,360 H252" marker-end="url(#ah3)"/>
+      <text class="s" x="40" y="440">Ranked retrieval is saved before the LLM call, so retrieval metrics exist even if generation fails.</text>
+    </svg>
+    </div>
+    <figcaption>Every question is searched in both documents' stores separately, because comparison questions always need both. Each document gets its own labelled context block, and every passage carries its chunk ID so the model can cite exactly where each fact came from.</figcaption>
+  </figure>
+
+  <h3>Method</h3>
+  <ol class="steps">
+    <li><b>Index.</b> Each document's children are embedded as "section title + chunk text" and stored in their own Chroma collection with cosine distance and metadata (child ID, parent ID, document). Parents are not embedded; they are looked up by ID. A store rebuilds itself if the chunks or the embedding model change.</li>
+    <li><b>Retrieve.</b> The question is embedded once and searched in every store: top 10 children per document, ranked with scores. An isolation check confirms each result came from its own document.</li>
+    <li><b>Expand.</b> The parents of the top 4 children per document (at most 3 sections each) are rendered in full, every child prefixed with its ID.</li>
+    <li><b>Answer.</b> The model under test receives the context and the question and must reply in JSON: relation type, answer, a list of claims each with chunk-ID citations, and anything a document does not address. The response is streamed so time-to-first-token is measured.</li>
+    <li><b>Validate.</b> Each citation is marked <code>ok</code> (in the context), <code>not_in_context</code> (real chunk, not retrieved) or <code>fabricated</code> (no such chunk), and mapped to its parent and document.</li>
+  </ol>
+  <p class="small">Special modes used by the reliability suite: <b>long context</b> skips retrieval and buries the gold sections in filler; <b>injection</b> appends a planted false passage to one document's block and marks citations of it as <code>injected_false_passage</code>.</p>
+
+  <h3>Example: Q-T04-02</h3>
+  <div class="grid2">
+    <pre>// retrieval.jsonl (MiniLM) – rank, child, cosine
+D1: 1 D1-P04-C01 0.566   ← gold evidence
+    2 D1-P02-C02 0.531
+    3 D1-P04-C02 0.475
+D2: 1 D2-P04-C02 0.571   ← gold evidence
+    2 D2-P04-C01 0.480
+    3 D2-P03-C02 0.440
+context sections: D1-P04, D1-P02 | D2-P04, D2-P03</pre>
+    <pre>// generation.jsonl (abridged)
+"relation": "differential",
+"answer": "The UK Handbook states that full-time employees
+  receive 25 days of annual leave plus 8 bank holidays ...
+  The India Handbook ... 18 days of earned/privilege leave ...",
+"claims": [
+ {"text": "Full-time employees receive 25 days' annual leave ...",
+  "citations": [{"child_id": "D1-P04-C01", "parent_id": "D1-P04",
+                 "doc_id": "D1", "status": "ok"}]},
+ {"text": "Earned / privilege leave entitlement is 18 days per year",
+  "citations": [{"child_id": "D2-P04-C02", ..., "status": "ok"}]}],
+"not_found": [], "ttft_s": 0.543, "latency_s": 1.808</pre>
+  </div>
+</section>
+
+<!-- ============================================================ PHASE 4 -->
+<section id="p4">
+  <h2><span class="num">4</span>Performance evaluation (P1–P7)</h2>
+  <div class="tags"><span class="tag t-llm">Internal LLM: judge</span><span class="tag t-local">NLI + MiniLM</span><span class="tag t-det">Formulas and ID matching</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase4_evaluate.py --run-id baseline</code></dd>
+    <dt>Reads</dt><dd>only <code>golden.jsonl</code> and the run's <code>retrieval.jsonl</code> / <code>generation.jsonl</code> (decoupled from Phases 1–3)</dd>
+    <dt>Writes</dt><dd><code>outputs/runs/&lt;run_id&gt;/eval/</code>: <code>summary.json</code>, <code>per_question.jsonl</code>, <code>scores.csv</code>, <code>judge.jsonl</code></dd></dl>
+  <p>Each framework sub-metric that applies to Document Comparison is computed with the implementation the framework names. Hybrid metrics use a cheap deterministic step first; only the uncertain middle band goes to the judge. Judge calls run four at a time and are cached per judge model. A failed judge call is reported as missing, never as 0. The full method table with worked examples is in <a href="#evaluation">Evaluation methods</a>.</p>
+</section>
+
+<!-- ============================================================ PHASE 4b -->
+<section id="p4b">
+  <h2><span class="num">4b</span>Reliability evaluation (R1–R4)</h2>
+  <div class="tags"><span class="tag t-llm">Internal LLM: judge</span><span class="tag t-det">Validators, deltas, regression</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase4b_reliability.py --run-id reliability --baseline-run-id baseline</code></dd>
+    <dt>Reads</dt><dd>the variant run, plus the clean baseline run and its Phase 4 evaluation (the clean accuracy to compare against)</dd>
+    <dt>Writes</dt><dd><code>outputs/runs/&lt;run_id&gt;/eval_reliability/</code>: <code>summary.json</code>, <code>per_variant.jsonl</code></dd></dl>
+  <p>Accuracy for every variant is the same P1 semantic-correctness method as Phase 4, so a drop between the clean question and its variant is caused by the perturbation, not by a change in scoring. Methods per test are in <a href="#eval-rel">the reliability table</a>.</p>
+</section>
+
+<!-- ============================================================ PHASE 5 -->
+<section id="p5">
+  <h2><span class="num">5</span>Report: scorecard and HTML</h2>
+  <div class="tags"><span class="tag t-det">No model</span></div>
+  <dl class="io card"><dt>Command</dt><dd><code>python scripts/run_phase5_report.py --run-id baseline --reliability-run-id reliability</code></dd>
+    <dt>Writes</dt><dd><code>outputs/reports/&lt;date&gt;_&lt;run&gt;/Evaluation_Scorecard.xlsx</code> and <code>report.html</code></dd></dl>
+  <ul>
+    <li><b>Scorecard sheet:</b> one row for each of the 45 framework sub-metrics, read from the framework workbook, with its Document Comparison applicability (✓ / O / blank), implementation, status, score, direction, threshold, result, n and a data-driven key finding. <b>Result is an Excel formula</b>, so changing a threshold re-grades the row; the summary block uses <code>COUNTIFS</code>.</li>
+    <li><b>Rows without a score explain why:</b> "N/A for this capability (framework)" (P4 Redundancy), "Not run (optional)" (for example P5 Linguistic, R1 Temporal), or "Out of scope" for Safety. S5 Fabricated Citations is scored because it comes free from the citation checks.</li>
+    <li><b>Other sheets:</b> Performance Detail (sub-metrics, relation confusion matrix, breakdowns by type, reasoning and difficulty), Retrieval (every k, per document and combined), Reliability Detail, Per Question, Run Info.</li>
+    <li><b>report.html:</b> KPI tiles, scores against thresholds, the full scorecard, retrieval recall@k, the comparison-type confusion heatmap, clean vs perturbed accuracy and the long-context heatmap, with data tables behind each chart.</li>
+  </ul>
+</section>
+
+<!-- ============================================================ EVALUATION -->
+<section id="evaluation">
+  <h2>Evaluation methods, with worked examples</h2>
+  <p>Worked examples use golden question <b>Q-T04-02</b> (annual leave, differential) and the answer shown in Phase 3. The three method types are as defined in the framework:</p>
+  <div class="grid3">
+    <div class="card"><span class="tag t-det">Deterministic</span><p class="small">A formula, algorithm or classifier with no subjective judgement: string and number matching, ID matching, NLI classifier, cosine similarity.</p></div>
+    <div class="card"><span class="tag t-llm">LLM Judge</span><p class="small">The internal judge LLM receives the question, response and a rubric and returns a verdict or score where no formula is enough.</p></div>
+    <div class="card"><span class="tag t-local">Hybrid</span><p class="small">A deterministic step first: either a pre-filter that settles clear cases (cosine ≥0.97 pass, ≤0.40 fail) or an evidence-structuring step (key-point matching, NLI flags). The judge decides the rest.</p></div>
+  </div>
+
+  <h3 id="eval-ret">Retrieval (RAG layer)</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Metric</th><th>Method</th><th>Formula</th><th>Q-T04-02</th></tr></thead>
+    <tbody>
+      <tr><td>Recall@k</td><td><span class="tag t-det">ID match</span></td><td>relevant chunks in top-k ÷ all relevant chunks, per document, at child and parent level, k = 1, 3, 5, 10</td><td class="n">D1 1.0 · D2 1.0 (@5)</td></tr>
+      <tr><td>Precision@k</td><td><span class="tag t-det">ID match</span></td><td>relevant chunks in top-k ÷ chunks retrieved in top-k</td><td class="n">0.2 (@5: 1 of 5)</td></tr>
+      <tr><td>Hit@k, MRR, nDCG@k</td><td><span class="tag t-det">ID match</span></td><td>any hit; 1 ÷ rank of first hit; rank-discounted gain</td><td class="n">MRR 1.0 (rank 1)</td></tr>
+      <tr><td>Both-sides hit@k</td><td><span class="tag t-det">ID match</span></td><td>1 if each document's evidence is in its own top-k</td><td class="n">1.0</td></tr>
+      <tr><td>Quality gate</td><td><span class="tag t-det">threshold</span></td><td>combined child Recall@5 ≥ 0.80 (<code>--retrieval-only</code> fails otherwise)</td><td class="n">sample: 0.897</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Relevance comes from the golden evidence IDs. A side that does not contain the answer (asymmetric "absent" side) has nothing to retrieve and is excluded from these averages.</p>
+
+  <h3 id="eval-perf">Performance (P1–P7)</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Sub-metric</th><th>Method</th><th>How it is computed</th><th>Worked example (Q-T04-02)</th><th>Pass</th></tr></thead>
+    <tbody>
+      <tr><td><b>P1 Exact / Objective</b></td><td><span class="tag t-det">Deterministic</span></td><td>Mean of (a) relation exact match: predicted type = gold type, and (b) numeric tolerance match: share of numbers in the ground truth that appear in the answer within 1%. Token-overlap F1 is reported alongside.</td><td>relation 1.0; numbers 25, 8, 18 found, 7 missing → 0.75; score <b>0.875</b>; token F1 0.51</td><td class="n">≥ 0.80</td></tr>
+      <tr><td><b>P1 Semantic correctness</b></td><td><span class="tag t-local">Hybrid</span></td><td>Cosine(answer, ground truth): ≥0.97 auto-pass, ≤0.40 auto-fail, otherwise the judge compares conclusions and checks polarity flips and attribution swaps. correct = 1, partially = 0.5, incorrect = 0.</td><td>cosine 0.949 → judge: "correct", no flip, no swap → <b>1.0</b></td><td class="n">≥ 0.80</td></tr>
+      <tr><td><b>P2 Query relevance</b></td><td><span class="tag t-local">Hybrid</span></td><td>Cosine(question, answer) pre-filter, then a judge score 1–5 ignoring correctness, mapped to (score − 1) ÷ 4.</td><td>cosine 0.689 → judge 5 → <b>1.0</b></td><td class="n">≥ 0.80</td></tr>
+      <tr><td><b>P3 Completeness</b></td><td><span class="tag t-local">Hybrid</span></td><td>Ground-truth key points form the checklist; each is matched to its best answer sentence by cosine; the judge verifies every point; coverage = points satisfied ÷ N.</td><td>3 points: 25 days ✓, 18 days ✓, "more by 7 days" ✗ (answer compared 33 vs 18) → <b>0.667</b></td><td class="n">≥ 0.80</td></tr>
+      <tr><td>P4 Redundancy</td><td>—</td><td>Blank for Document Comparison in the framework, so not computed.</td><td>N/A</td><td>—</td></tr>
+      <tr><td><b>P5 Logical coherence</b> (O)</td><td><span class="tag t-local">Hybrid</span></td><td>NLI checks every pair of answer sentences for contradiction (pairs that each name a different document are skipped, because "A says X, B says Y" is not a contradiction); the judge scores 1–5 and must quote the offending sentence below 4.</td><td>4 sentence pairs checked, 0 flags; judge 5 → <b>1.0</b></td><td class="n">≥ 0.80</td></tr>
+      <tr><td>P5 Linguistic quality (O)</td><td><span class="tag t-local">Hybrid</span></td><td>Readability band (Flesch 30–70) plus a judge clarity score. Off by default.</td><td>not run</td><td class="n">≥ 0.70</td></tr>
+      <tr><td><b>P6 Claim faithfulness</b></td><td><span class="tag t-det">Deterministic</span></td><td>Claims come from the answer's structured claim list. Each claim is compared by NLI with its 3 most similar context chunks, split into single sentences and table rows (sentence-level NLI). Document-name prefixes are neutralised; "does not mention" claims are excluded and scored as absence handling. Rate = entailed ÷ claims.</td><td>3 claims, entailment 0.995 / 0.997 / 0.996 → <b>1.0</b></td><td class="n">≥ 0.85</td></tr>
+      <tr><td><b>P6 Citation accuracy</b></td><td><span class="tag t-det">Deterministic</span></td><td>NLI on (cited passages, claim) for every cited claim; invalid citations count as inaccurate. Also cited IDs vs golden evidence IDs: precision, recall, F1 at child and parent level.</td><td>3 of 3 accurate → <b>1.0</b>; child precision 0.67 (cited an extra chunk), recall 1.0; parent 1.0 / 1.0</td><td class="n">≥ 0.85</td></tr>
+      <tr><td><b>P7 Latency</b></td><td><span class="tag t-det">Deterministic</span></td><td>Time to first token and total time from streaming; mean, p50, p95; share within SLA (TTFT ≤3 s and total ≤10 s).</td><td>TTFT 0.54 s, total 1.81 s → within SLA</td><td class="n">≥ 0.95 of answers</td></tr>
+      <tr><td><b>P7 Token usage / cost</b></td><td><span class="tag t-det">Deterministic</span></td><td>input + output tokens; cost = tokens × configured internal rates.</td><td>1,263 in + 249 out = 1,512 tokens</td><td>reported</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Document-comparison checks (reported with Performance)</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Check</th><th>Method</th><th>What it catches</th><th>Q-T04-02</th></tr></thead>
+    <tbody>
+      <tr><td>Relation confusion matrix</td><td><span class="tag t-det">count</span></td><td>Which comparison types the model confuses (e.g. equivalence answered as differential).</td><td>differential → differential</td></tr>
+      <tr><td>Invented-difference rate</td><td><span class="tag t-det">rule</span></td><td>Equivalence questions answered as "different" or "one-sided".</td><td>n/a (differential)</td></tr>
+      <tr><td>Absence detection</td><td><span class="tag t-det">rule</span></td><td>For asymmetric questions: the absent document appears in the answer's <code>not_found</code>.</td><td>n/a (no absent side)</td></tr>
+      <tr><td>Both documents cited</td><td><span class="tag t-det">ID match</span></td><td>The answer cites evidence from every document that holds gold evidence.</td><td>yes</td></tr>
+      <tr><td>Attribution swaps</td><td><span class="tag t-llm">judge</span> (inside P1 semantic)</td><td>A fact from one document credited to the other.</td><td>none</td></tr>
+      <tr><td>S5 Fabricated citations</td><td><span class="tag t-det">ID existence</span></td><td>Cited chunk IDs that do not exist anywhere. Lower is better, threshold ≤ 0.01.</td><td>0 of 3</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="eval-rel">Reliability (R1–R4)</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Sub-metric</th><th>Method</th><th>Framework formula as implemented</th><th>Example from the sample run</th><th>Pass</th></tr></thead>
+    <tbody>
+      <tr><td><b>R1 Semantic consistency</b></td><td><span class="tag t-local">Hybrid</span></td><td>Headline = expected-match rate: share of paraphrase answers judged fully correct against the ground truth. Also: pairwise cosine between all answers to one question ≥ 0.80, and relation-label agreement.</td><td>Paraphrases of Q-T09-03 answered and scored like the original</td><td class="n">≥ 0.85</td></tr>
+      <tr><td><b>R1 Repeatability</b> (O)</td><td><span class="tag t-det">Deterministic</span></td><td>5 identical runs, temperature 0, fixed seed: exact-match rate to the most common answer; standard deviation of pairwise similarity.</td><td>Answers that differ only in wording lower exact match, not correctness</td><td class="n">≥ 0.80</td></tr>
+      <tr><td><b>R2 Typo / noise</b></td><td><span class="tag t-local">Hybrid accuracy</span></td><td>Accuracy(clean) − accuracy(perturbed) per perturbation type; flagged if the drop exceeds 5 points. Headline = 1 − overall drop. Retrieval recall of the noisy questions is reported too.</td><td>Character typos, casing and whitespace each scored against the same 30 clean questions</td><td class="n">≥ 0.95</td></tr>
+      <tr><td><b>R2 Adversarial</b></td><td><span class="tag t-llm">Judge</span> + accuracy delta</td><td>Judge classifies Held / Partially Shifted / Fully Capitulated given the technique, the normal answer and the adversarial answer; headline = Held rate. Accuracy drop per technique; how often the planted passage was cited.</td><td>Q-T04-02 with planted "25 days" in the India block: <b>Held</b> (still said the UK gives more). Same question with a false premise: <b>Partially Shifted</b>.</td><td class="n">≥ 0.80</td></tr>
+      <tr><td><b>R2 Long context</b></td><td><span class="tag t-local">Hybrid accuracy</span></td><td>Accuracy for each length × position cell (heatmap); slope of accuracy against log₁₀(length); lost-in-the-middle gap = mean(start, end) − middle.</td><td>12 cells from 1K to 100K tokens, evidence at start / middle / end</td><td class="n">≥ 0.80</td></tr>
+      <tr><td><b>R3 Format</b></td><td><span class="tag t-det">Deterministic</span></td><td>Validator per rule: word count ≤60; exactly 3 bullet lines and nothing else; markdown table with ≥3 columns whose header names both documents; no markdown characters. Compliance rate per rule.</td><td><code>Q-T09-08~fmt_bullets_1</code>: answered in prose → <b>fail</b></td><td class="n">≥ 0.90</td></tr>
+      <tr><td><b>R3 Constraint</b></td><td><span class="tag t-local">Hybrid</span></td><td>Hard rule by regex (any law / act / regulation name = violation); soft rules (no recommendation, stay on topic) by judge pass/fail. Compliance rate.</td><td>"Do not mention any law…" checked by regex; "stay on topic" by the judge</td><td class="n">≥ 0.90</td></tr>
+      <tr><td><b>R3 Multi-step</b></td><td><span class="tag t-local">Hybrid</span></td><td>Five sub-requirements: labelled parts in order, Part 1 names both documents, Part 2 states the relationship, Part 3 is one sentence (all regex), Part 3 is a consistent implication (judge). Coverage = met ÷ 5.</td><td>Answer with Part 1 / 2 / 3 checked requirement by requirement</td><td class="n">≥ 0.90</td></tr>
+      <tr><td><b>R4 Ambiguity</b></td><td><span class="tag t-local">Hybrid</span></td><td>Clarification phrases by regex auto-pass; otherwise the judge classifies Clarification Requested / Multiple Interpretations Acknowledged / Silently Assumed One. The first two count as appropriate.</td><td>R4-AMB-01 "How much leave…": <b>Multiple Interpretations Acknowledged</b></td><td class="n">≥ 0.70</td></tr>
+      <tr><td><b>R4 Insufficient evidence</b> (O)</td><td><span class="tag t-local">Hybrid</span></td><td>Abstention phrases plus "not found" for both documents auto-pass; otherwise the judge classifies Correct Abstention / Incorrect Guess. Also the false-abstention rate on the answerable golden set.</td><td>R4-UNANS-01 tuition reimbursement: "Neither handbook mentions …" → <b>Correct Abstention</b></td><td class="n">≥ 0.80</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Thresholds are defaults in <code>config.yaml</code> (<code>evaluation.pass_thresholds</code>, <code>reliability.pass_thresholds</code>) and should be set to the team's targets. The cosine pre-filter cut-offs (0.97 / 0.40, consistency 0.80) were calibrated for all-MiniLM-L6-v2 on judged answers. Recalibrate them if the embedding model changes.</div>
+</section>
+
+<!-- ============================================================ OPERATIONS -->
+<section id="operations">
+  <h2>Running and recovery</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Phase</th><th>Command</th><th>Internal LLM</th><th>Needs first</th></tr></thead>
+    <tbody>
+      <tr><td>0 Ingest</td><td><code>python scripts/run_phase0_ingest.py</code></td><td>none</td><td>documents</td></tr>
+      <tr><td>Embedding check</td><td><code>python scripts/check_embeddings.py</code></td><td>none</td><td>Phase 0</td></tr>
+      <tr><td>1 Align</td><td><code>python scripts/run_phase1_align.py</code></td><td>generator</td><td>Phase 0</td></tr>
+      <tr><td>2 Golden</td><td><code>python scripts/run_phase2_golden.py</code></td><td>generator, judge</td><td>Phase 1</td></tr>
+      <tr><td>2b Reliability suite</td><td><code>python scripts/run_phase2b_reliability_suite.py</code></td><td>generator, judge</td><td>Phase 2</td></tr>
+      <tr><td>3 Retrieval check</td><td><code>python scripts/run_phase3_rag.py --retrieval-only</code></td><td>none</td><td>Phase 0 (+2)</td></tr>
+      <tr><td>3 RAG answers</td><td><code>python scripts/run_phase3_rag.py --run-id &lt;id&gt; [--questions …]</code></td><td>model under test</td><td>Phase 2 / 2b</td></tr>
+      <tr><td>4 Performance</td><td><code>python scripts/run_phase4_evaluate.py --run-id &lt;id&gt;</code></td><td>judge</td><td>Phase 3</td></tr>
+      <tr><td>4b Reliability</td><td><code>python scripts/run_phase4b_reliability.py --run-id &lt;var&gt; --baseline-run-id &lt;clean&gt;</code></td><td>judge</td><td>Phase 3 + Phase 4 on clean</td></tr>
+      <tr><td>5 Report</td><td><code>python scripts/run_phase5_report.py --run-id &lt;clean&gt; --reliability-run-id &lt;var&gt;</code></td><td>none</td><td>Phase 4 (+4b)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div class="card"><h4>Interruptions</h4><ul class="small">
+      <li>Each LLM result is appended to its file and flushed to disk as soon as it finishes. A half-written last line is skipped on the next read.</li>
+      <li>Running the same command again skips finished items.</li>
+      <li>Items that failed after 6 retries with exponential backoff go to <code>failed_*.jsonl</code>; <code>--retry-failed</code> re-runs them.</li>
+      <li>An error matching <code>llm.quota_error_patterns</code> stops the run immediately instead of failing every remaining call.</li></ul></div>
+    <div class="card"><h4>Safety rails</h4><ul class="small">
+      <li>Phases 1–2 refuse to resume if their inputs or models changed (<code>--fresh</code> starts over).</li>
+      <li>A Phase 3 run id refuses to resume with different settings, questions or answer prompt.</li>
+      <li>Judge verdicts are cached per judge model, so a new judge never reuses old verdicts.</li>
+      <li>Evaluating a new model = change <code>under_test</code>, then Phases 3 → 4 → 4b → 5 with new run ids; the test set is reused unchanged.</li></ul></div>
+  </div>
+</section>
+
+<!-- ============================================================ LIMITS -->
+<section id="limits">
+  <h2>Known limits</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Area</th><th>Limit</th><th>Effect / mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>PDF input</td><td>No OCR; multi-column pages; tables that continue onto the next page</td><td>Scanned pages yield no text; column text can interleave; a continued table's first row is treated as a header. Use DOCX/Markdown or OCR the file first.</td></tr>
+      <tr><td>Embeddings</td><td>MiniLM reads ~256 word pieces and is weaker than large embedding models</td><td>Chunks (~120 tokens) fit; long answers are truncated for cosine. In the sample, retrieval recall@5 is 0.90; raising <code>rag.context_k</code> recovers recall at the cost of a longer context.</td></tr>
+      <tr><td>P6 groundedness</td><td>Sentence-level NLI cannot combine a long list spread across several sentences</td><td>Part of a low P6 score can be the method's limit, not the model's. Per-claim NLI scores are kept in <code>per_question.jsonl</code> for review.</td></tr>
+      <tr><td>R3 format</td><td>The answer is written inside a JSON field</td><td>Line-based formats such as bullets may be harder than in free chat; read format scores in that context.</td></tr>
+      <tr><td>Scale</td><td>Built and validated on 3–4 page documents</td><td>For long documents: cap topic sizes in Phase 1, check unanswerable questions by retrieval instead of full documents in Phase 2b, and run Phases 1–2b with parallel workers.</td></tr>
+      <tr><td>Prompts</td><td>Prompts are written for HR handbooks</td><td>For other document types, adjust the wording in <code>src/*/prompts.py</code> and <code>golden.banned_terms</code>.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+</main>
+</div>
+
+</body></html>
